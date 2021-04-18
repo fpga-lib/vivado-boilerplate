@@ -7,6 +7,7 @@ parameters:
     LENGTH_WIDTH   : = clog2(LENGTH) 
     LINK_WIDTH     : '4'
     LINK_SPEED     : '5.0'
+    PCIE_MPS       : 512
     SLON           : = WIDTH + LENGTH_WIDTH
     CLK_PERIOD     : = 1e3/clk.MAIN_CLK_FREQ      # ns
     TASK_COUNT     : = dpc.TASK_QUEUE_COUNT

@@ -47,7 +47,7 @@ def clog2(n: int) -> int:
     return res
 #-------------------------------------------------------------------------------
 def max_str_len(x):
-    return len(max(x))
+    return len(max(x, key=len))
 #-------------------------------------------------------------------------------
 class Dict2Class(object):
 
@@ -128,11 +128,48 @@ def read_config(fn: str, param_sect='parameters', as_class = False):
 def import_config(fn: str):
     return Dict2Class( read_config(fn) )
 #-------------------------------------------------------------------------------
-def read_ip_config(fn: str):
+def read_ip_config(fn: str, param_sect):
 
-    cfg = read_config(fn, 'config')
+    cfg_params = read_config(fn, param_sect)
     
-    return cfg
+    with open( fn ) as f:
+        cfg = yaml.safe_load(f)
+        
+    ip_cfg = {}
+    ip_cfg['type']     = cfg['type']
+    ip_cfg[param_sect] = cfg_params
+        
+    return ip_cfg
 
+#-------------------------------------------------------------------------------
+def generate_title(text: str, comment: str) -> str:
+    
+    hsep_len = 80 - len(comment)
+    
+    empty_line   = comment + '*' + os.linesep
+    title_header = comment + '*'*hsep_len + os.linesep + empty_line
+
+    title_body = comment + '*' +  (4 - len(comment))*' '
+    
+    title_footer = empty_line + comment + '-'*hsep_len + os.linesep
+    
+    lines = text.split(os.linesep)
+    out = title_header
+    for line in lines:
+        out += title_body+ line + os.linesep
+        
+    out += title_footer + os.linesep
+    
+    return out
+
+#-------------------------------------------------------------------------------
+def generate_footer(comment: str) -> str:
+
+    hsep_len = 80 - len(comment)
+
+    empty_line = ' ' + os.linesep
+    separator  = comment + '*'*hsep_len + os.linesep
+
+    return  empty_line + separator
 #-------------------------------------------------------------------------------
 
