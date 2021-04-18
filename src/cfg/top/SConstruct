@@ -1,0 +1,182 @@
+
+
+import os
+import sys
+import subprocess
+import re
+import importlib
+
+sys.dont_write_bytecode = True
+
+from utils import *
+
+
+#-------------------------------------------------------------------------------
+#
+#    General Settings
+#
+cfg  = import_config('cfg.yml')
+ext  = import_config('filetype.yml')
+dirs = import_config('dirpath.yml')
+
+ConfigName = cfg.NAME
+DEVICE     = cfg.DEVICE
+
+ip       = ['pll'] #, 'pcie']
+
+
+#-------------------------------------------------------------------------------
+#
+#    Environment
+#
+env = Environment( tools = {} )
+
+env['SETTINGS_SEARCH_PATH'] = [(dirs.CFG_SETTINGS)]
+
+#-------------------------------------------------------------------------------
+#
+#    Project Structure
+#
+
+
+
+#-------------------------------------------------------------------------------
+#
+#    Builders
+#
+
+#---------------------------------------------------------------------
+#
+#    Build Tcl script to create OOC IP
+#
+def create_ip_script(target, source, env):
+    print('building Create IP script ' + str(target[0]))
+
+    src = str(source[0])
+
+    cfg = read_ip_config(src)
+
+    pexec('touch ' + str(target[0]))
+
+#---------------------------------------------------------------------
+#
+#    Generate IP
+#
+def generate_ip(target, source, env):
+    pass
+
+#---------------------------------------------------------------------
+#
+#    Run OOC IP synthesis
+#
+def ip_core_synthesize(target, source, env):
+    pass
+
+
+#-------------------------------------------------------------------------------
+#
+#    Scanners
+#
+#---------------------------------------------------------------------
+#
+#    Scanner functions
+#
+def scan_cfg_files(node, env, path):
+    
+#    print('scan node:', str(node))    
+    fname = str(node)
+    with open(fname) as f:
+        cfg = yaml.safe_load(f)
+        
+    if 'import' in cfg:
+        imports = []
+        for i in cfg['import'].split():
+            fn = i + '.' + ext.CONFIG
+            full_path = glob.glob(os.path.join('**', fn))
+            imports += full_path
+        
+        #print(imports)
+        return env.File(imports)
+        
+    else:
+        return env.File([])
+#---------------------------------------------------------------------
+    
+#-------------------------------------------------------------------------------
+#
+#    Create scanners
+#
+    
+    
+CfgImportScanner = Scanner(name          = 'CfgImportScanner',
+                           function      = scan_cfg_files,
+                           skeys         = ['.' + ext.IP_CONFIG],
+                           recursive     = True,
+                           path_function = FindPathDirs('SETTINGS_SEARCH_PATH')
+                          )    
+
+
+#-------------------------------------------------------------------------------
+#
+#    Create builders
+#
+CreateIpScript = Builder(action         = create_ip_script,
+                         suffix         = ext.TOOL_SCRIPT,
+                         #src_suffix     = ext.IP_CONFIG,
+                         source_scanner = CfgImportScanner)
+
+IpCoreGen      = Builder(action     = generate_ip,
+                         suffix     = ext.IP_CORE,
+                         src_suffix = ext.TOOL_SCRIPT)
+                 
+IpCoreSyn      = Builder(action     = ip_core_synthesize,
+                         suffix     = ext.DESIGN_CHECKPOINT,
+                         src_suffix = ext.IP_CORE)
+
+env['BUILDERS'] = \
+{
+    'CREATE_IP_SCRIPT' : CreateIpScript,
+    'IP_CORE_GEN'      : IpCoreGen,
+    'IP_CORE_GEN'      : IpCoreSyn
+}
+                   
+#-------------------------------------------------------------------------------
+#
+#    Targets
+#
+def make_target_dict(src, target_ext, target_dir):
+    targets = {}
+    suffix = '.' + target_ext if target_ext else ''
+    
+    for i in src:
+        name_ext   = os.path.split(i)[1]
+        name       = os.path.splitext(name_ext)[0] + suffix
+        targets[i] = os.path.join(target_dir, name)
+        Depends(targets[i],  'SConstruct')      
+
+    return targets
+
+#---------------------------------------------------------------------
+def make_create_ip_script_targets(ips):
+    script_list = []
+    
+    for i in ips:
+        script_list.append( env.CREATE_IP_SCRIPT(ips[i], i) )
+
+    return script_list
+
+#---------------------------------------------------------------------
+
+ip_src = [os.path.join(dirs.CFG_IP, i + '.' + ext.IP_CONFIG) for i in ip]
+ip_script_trg = make_target_dict(ip_src, ext.TOOL_SCRIPT, dirs.IP_SCRIPT)
+
+create_ip_script_list = make_create_ip_script_targets(ip_script_trg)
+
+Default(create_ip_script_list)
+#-------------------------------------------------------------------------------
+for i in dirs.OUTPUT:
+    if not os.path.exists(i):
+        print('scons: create directory "' + i + '"')
+        os.makedirs(i)
+#-------------------------------------------------------------------------------
+
