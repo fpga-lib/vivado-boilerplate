@@ -213,7 +213,7 @@ CfgImportScanner = Scanner(name          = 'CfgImportScanner',
 #
 #    Create builders
 #
-CreateIpScript = Builder(action         = create_ip_script,
+IpCreateScript = Builder(action         = ip_create_script,
                          suffix         = ext.TOOL_SCRIPT,
                          #src_suffix     = ext.IP_CONFIG,
                          source_scanner = CfgImportScanner)
@@ -228,9 +228,10 @@ IpCoreSyn      = Builder(action     = ip_core_synthesize,
 
 env['BUILDERS'] = \
 {
-    'CREATE_IP_SCRIPT' : CreateIpScript,
+    'IP_CREATE_SCRIPT' : IpCreateScript,
+    'IP_SYN_SCRIPT'    : IpSynScript,
     'IP_CORE_GEN'      : IpCoreGen,
-    'IP_CORE_GEN'      : IpCoreSyn
+    'IP_CORE_SYN'      : IpCoreSyn
 }
                    
 #-------------------------------------------------------------------------------
