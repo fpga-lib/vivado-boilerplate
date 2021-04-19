@@ -218,6 +218,10 @@ IpCreateScript = Builder(action         = ip_create_script,
                          #src_suffix     = ext.IP_CONFIG,
                          source_scanner = CfgImportScanner)
 
+IpSynScript    = Builder(action         = ip_syn_script,
+                         suffix         = ext.TOOL_SCRIPT
+                        )
+
 IpCoreGen      = Builder(action     = generate_ip,
                          suffix     = ext.IP_CORE,
                          src_suffix = ext.TOOL_SCRIPT)
