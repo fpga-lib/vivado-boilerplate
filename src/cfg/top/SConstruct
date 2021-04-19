@@ -242,35 +242,48 @@ env['BUILDERS'] = \
 #
 #    Targets
 #
-def make_target_dict(src, target_ext, target_dir):
-    targets = {}
-    suffix = '.' + target_ext if target_ext else ''
+def make_trg_nodes(src_list, src_suffix, trg_suffix, trg_dir, builder):
     
-    for i in src:
-        name_ext   = os.path.split(i)[1]
-        name       = os.path.splitext(name_ext)[0] + suffix
-        targets[i] = os.path.join(target_dir, name)
-        Depends(targets[i],  'SConstruct')      
-
-    return targets
+    trg_list = []
+    for src in src_list:
+        if type(src) == str:
+            src_str = src
+        else:
+            src_str = str(src[0])
+        src_name = os.path.split(src_str)[1]
+        trg_name = src_name.replace(src_suffix, trg_suffix)
+        trg      = os.path.join(trg_dir, trg_name)
+        trg_list.append( builder(trg, src) )
+        
+    Depends(trg_list, 'SConstruct')
+    return trg_list
 
 #---------------------------------------------------------------------
-def make_create_ip_script_targets(ips):
-    script_list = []
-    
-    for i in ips:
-        script_list.append( env.CREATE_IP_SCRIPT(ips[i], i) )
-
-    return script_list
-
-#---------------------------------------------------------------------
-
+#
+#    Generating create IP script targets
+#
 ip_src = [os.path.join(dirs.CFG_IP, i + '.' + ext.IP_CONFIG) for i in ip]
-ip_script_trg = make_target_dict(ip_src, ext.TOOL_SCRIPT, dirs.IP_SCRIPT)
+ip_create_script_nodes = make_trg_nodes(ip_src, 
+                                        '.'+ext.IP_CONFIG, 
+                                        '-create.'+ext.TOOL_SCRIPT, 
+                                        dirs.IP_SCRIPT,
+                                        env.IP_CREATE_SCRIPT)
 
-create_ip_script_list = make_create_ip_script_targets(ip_script_trg)
+#---------------------------------------------------------------------
+#
+#    Generating synthesize IP script targets
+#
+ip_syn_script_nodes = make_trg_nodes(ip_create_script_nodes, 
+                                     '-create.'+ext.TOOL_SCRIPT, 
+                                     '-syn.'+ext.TOOL_SCRIPT, 
+                                     dirs.IP_SCRIPT,
+                                     env.IP_SYN_SCRIPT)
+#---------------------------------------------------------------------
+#
+#    Creating IP core targets
+#
 
-Default(create_ip_script_list)
+Default(ip_syn_script_nodes)
 #-------------------------------------------------------------------------------
 for i in dirs.OUTPUT:
     if not os.path.exists(i):
