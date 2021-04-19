@@ -49,18 +49,17 @@ env['SETTINGS_SEARCH_PATH'] = [(dirs.CFG_SETTINGS)]
 #
 #    Build Tcl script to create OOC IP
 #
-def create_ip_script(target, source, env):
-    print('building Create IP script ' + str(target[0]))
+def ip_create_script(target, source, env):
 
-    param_sect = 'config'
-    
     src = str(source[0])
     trg = str(target[0])
     
+    print('building Create IP script ' + trg)
+
+    param_sect = 'config'
+    
     ip_name = os.path.splitext( os.path.basename(src) )[0]   # derive IP name from full path 
-    
-    ip_cfg = read_ip_config(src, param_sect)
-    
+    ip_cfg  = read_ip_config(src, param_sect)
     
     title_text =\
     'IP core "' + ip_name + '" creating script' + os.linesep*2 + \
