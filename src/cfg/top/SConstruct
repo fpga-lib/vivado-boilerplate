@@ -155,14 +155,20 @@ def ip_syn_script(target, source, env):
 #
 #    Generate IP
 #
-def generate_ip(target, source, env):
-    pass
+def ip_create(target, source, env):
+    
+    src = str(source[0])
+    trg = str(target[0])
+    print('create IP core ' + trg)
+
+
+    pexec('touch ' + str(target[0]))
 
 #---------------------------------------------------------------------
 #
 #    Run OOC IP synthesis
 #
-def ip_core_synthesize(target, source, env):
+def ip_synthesize(target, source, env):
     pass
 
 
@@ -222,11 +228,11 @@ IpSynScript    = Builder(action         = ip_syn_script,
                          suffix         = ext.TOOL_SCRIPT
                         )
 
-IpCoreGen      = Builder(action     = generate_ip,
+IpCreate       = Builder(action     = ip_create,
                          suffix     = ext.IP_CORE,
                          src_suffix = ext.TOOL_SCRIPT)
                  
-IpCoreSyn      = Builder(action     = ip_core_synthesize,
+IpSyn          = Builder(action     = ip_synthesize,
                          suffix     = ext.DESIGN_CHECKPOINT,
                          src_suffix = ext.IP_CORE)
 
@@ -234,8 +240,8 @@ env['BUILDERS'] = \
 {
     'IP_CREATE_SCRIPT' : IpCreateScript,
     'IP_SYN_SCRIPT'    : IpSynScript,
-    'IP_CORE_GEN'      : IpCoreGen,
-    'IP_CORE_SYN'      : IpCoreSyn
+    'IP_CREATE'        : IpCreate,
+    'IP_SYN'           : IpSyn
 }
                    
 #-------------------------------------------------------------------------------
@@ -282,8 +288,13 @@ ip_syn_script_nodes = make_trg_nodes(ip_create_script_nodes,
 #
 #    Creating IP core targets
 #
+ip_nodes = make_trg_nodes(ip_syn_script_nodes, 
+                          '-syn.'+ext.TOOL_SCRIPT, 
+                          '.'+ext.IP_CORE, 
+                          dirs.IP_OOC,
+                          env.IP_CREATE)
 
-Default(ip_syn_script_nodes)
+Default(ip_nodes)
 #-------------------------------------------------------------------------------
 for i in dirs.OUTPUT:
     if not os.path.exists(i):
