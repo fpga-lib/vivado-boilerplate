@@ -4,7 +4,7 @@ import os
 import sys
 import subprocess
 import re
-import importlib
+import shutil
 
 sys.dont_write_bytecode = True
 
@@ -22,7 +22,7 @@ dirs = import_config('dirpath.yml')
 ConfigName = cfg.NAME
 DEVICE     = cfg.DEVICE
 
-ip       = ['pll', 'pcie']
+ip       = ['pll'] #, 'pcie']
 
 #-------------------------------------------------------------------------------
 #
@@ -31,6 +31,11 @@ ip       = ['pll', 'pcie']
 env = Environment( tools = {} )
 
 env['SETTINGS_SEARCH_PATH'] = [(dirs.CFG_SETTINGS)]
+
+XILINX_VIVADO = os.environ['XILINX_VIVADO']
+
+env['VIVADO']       = os.path.join(XILINX_VIVADO, 'bin', 'vivado')
+env['VIVADO_FLAGS'] = ' -notrace -nojournal '
 
 #-------------------------------------------------------------------------------
 #
@@ -53,7 +58,7 @@ def ip_create_script(target, source, env):
     src = str(source[0])
     trg = str(target[0])
     
-    print('generate Create IP script: \'' + trg + '\'')
+    print('generate script:   \'' + os.path.basename(trg) + '\'')
 
     param_sect = 'config'
     
@@ -119,7 +124,7 @@ def ip_syn_script(target, source, env):
     src = str(source[0])
     trg = str(target[0])
 
-    print('generate Synthesize IP script: \'' + trg + '\'')
+    print('generate script:   \'' + os.path.basename(trg) + '\'')
 
     with open(src) as src_f:
         ip_create_script = src_f.read()
@@ -156,10 +161,27 @@ def ip_syn_script(target, source, env):
 #
 def ip_create(target, source, env):
     
-    src = str(source[0])
-    trg = str(target[0])
-    print('create IP core \'' + trg + '\'')
+    src     = str(source[0])
+    trg     = str(target[0])
+    ip_name = os.path.splitext(os.path.basename(trg))[0]
+    trg_dir = os.path.join(dirs.IP_OOC, ip_name)
+    flags   = env['VIVADO_FLAGS']
+    
+    print('create IP core     \'' + ip_name + '\'')
+    
+    if os.path.exists(trg_dir):
+        shutil.rmtree(trg_dir)
+        os.makedirs(trg_dir)
+    else:
+        os.makedirs(trg_dir)
+        
 
+#   cmd = env['VIVADO'] + ' -mode tcl ' + flags + ' -source ' + src
+#   print(cmd)
+#   rcode = pexec(cmd)
+#   return rcode
+        
+        
     pexec('touch ' + str(target[0]))
 
 #---------------------------------------------------------------------
@@ -168,10 +190,20 @@ def ip_create(target, source, env):
 #
 def ip_synthesize(target, source, env):
 
-    src = str(source[0])
-    trg = str(target[0])
-    print('synthesize OOC IP core \'' + trg + '\'')
+    src     = str(source[0])
+    trg     = str(target[0])
+    ip_name = os.path.splitext(os.path.basename(trg))[0]
+    trg_dir = os.path.join(dirs.IP_OOC, ip_name)
+    logfile = os.path.join(trg_dir, 'syn.log')
+    flags   = env['VIVADO_FLAGS']
+    
+    print('synthesize IP core \'' + ip_name + '\'')
 
+#   cmd = env['VIVADO'] + ' -mode tcl ' + flags + ' -log ' + logfile + ' -source ' + src
+#   print(cmd)
+#   rcode = pexec(cmd)
+#   return rcode
+    
     pexec('touch ' + str(target[0]))
 
 #-------------------------------------------------------------------------------
@@ -277,7 +309,10 @@ def make_trg_nodes(src, src_suffix, trg_suffix, trg_dir, builder):
 #    Processing OOC IP targets
 #
 
-ips = []
+ipcs   = []      # IP Create Scripts
+ipss   = []      # IP Synth Scripts
+ip_xci = []
+ip_dcp = []      
 
 for i in ip:
     ip_src = os.path.join(dirs.CFG_IP, i + '.' + ext.IP_CONFIG)
@@ -288,6 +323,7 @@ for i in ip:
                                             '-create.'+ext.TOOL_SCRIPT, 
                                             dirs.IP_SCRIPT,
                                             env.IP_CREATE_SCRIPT)
+    ipcs.append(ip_create_script_nodes)
 
     # Generating synthesize IP script targets
     ip_syn_script_nodes = make_trg_nodes(ip_create_script_nodes, 
@@ -295,22 +331,31 @@ for i in ip:
                                          '-syn.'+ext.TOOL_SCRIPT, 
                                          dirs.IP_SCRIPT,
                                          env.IP_SYN_SCRIPT)
+    ipss.append(ip_syn_script_nodes)
+    
     # Creating IP core targets
     ip_nodes = make_trg_nodes(ip_create_script_nodes, 
                               '-create.'+ext.TOOL_SCRIPT, 
                               '.'+ext.IP_CORE, 
-                              dirs.IP_OOC,
+                              os.path.join( dirs.IP_OOC, i ),
                               env.IP_CREATE)
 
+    ip_xci.append(ip_nodes)
+    
     # Synthesizing OOC IP core targets
-    ip_ooc_syn_nodes = make_trg_nodes(ip_nodes + ip_syn_script_nodes,
-                                      '.'+ext.IP_CORE, 
+    ip_ooc_syn_nodes = make_trg_nodes(ip_syn_script_nodes + ip_nodes,
+                                      '-syn.'+ext.TOOL_SCRIPT, 
                                       '.'+ext.DESIGN_CHECKPOINT, 
-                                      dirs.IP_OOC,
+                                      os.path.join( dirs.IP_OOC, i ),
                                       env.IP_SYN)
-    ips.append(ip_ooc_syn_nodes)
+    
+    ip_dcp.append(ip_ooc_syn_nodes)
 #Default(ip_create_script_nodes)
-Default(ips)
+Default(ip_dcp)
+#-------------------------------------------------------------------------------
+
+
+
 #-------------------------------------------------------------------------------
 for i in dirs.OUTPUT:
     if not os.path.exists(i):
