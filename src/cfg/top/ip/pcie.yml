@@ -10,16 +10,16 @@ config:
     Link_Speed           : = settings.LINK_SPEED + '_GT/s'
     Ref_Clk_Freq         : 100_MHz
                          
-    pipe_mode_sim        : Enable_Pipe_Simulation'
+    pipe_mode_sim        : Enable_Pipe_Simulation
     pipe_sim             : true
                          
     mode_selection       : Advanced 
     PCIe_Debug_Ports     : false                               # disable DRP
                          
-    Xlnx_Ref_Board       : AC701 
+    #Xlnx_Ref_Board       : AC701 
                          
-    Extended_Tag_Default : True
-    Extended_Tag_Field   : True
+    Extended_Tag_Default : true
+    Extended_Tag_Field   : true
 
 #-------------------------------------------------------------------
 #
@@ -31,9 +31,9 @@ config:
 #
 #   BAR0
 #
-    Bar0_64bit        : False
-    Bar0_Enabled      : True
-    Bar0_Prefetchable : False
+    Bar0_64bit        : false
+    Bar0_Enabled      : true
+    Bar0_Prefetchable : false
     Bar0_Scale        : Kilobytes
     Bar0_Size         : 2
     Bar0_Type         : Memory
@@ -64,4 +64,6 @@ config:
     MSI_64b                  : true
     MSI_Enabled              : true
     Multiple_Message_Capable : 1_vector
+
+#-------------------------------------------------------------------
 
