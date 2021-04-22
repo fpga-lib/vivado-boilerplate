@@ -26,14 +26,20 @@ def namegen(fullpath, ext):
 #-------------------------------------------------------------------------------
 def pexec(cmd):
     p = subprocess.Popen( cmd.split(), universal_newlines = True,
-                         stdin  = subprocess.PIPE,
-                         stdout = subprocess.PIPE,
-                         stderr = subprocess.PIPE )
+                         stdin    = subprocess.PIPE,
+                         stdout   = subprocess.PIPE,
+                         stderr   = subprocess.PIPE,
+                         encoding = 'utf8')
 
+    while True:
+        out = p.stdout.readline()    
+        if len(out) == 0 and p.poll() is not None:
+            break
+        if out:
+            print(out.strip())
 
-    out, err = p.communicate()
-
-    return p.returncode, out, err
+    rcode = p.poll()
+    return rcode
     
 #-------------------------------------------------------------------------------
 def clog2(n: int) -> int:
