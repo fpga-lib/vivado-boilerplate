@@ -24,8 +24,10 @@ def namegen(fullpath, ext):
     name     = os.path.splitext(basename)[0]
     return name + os.path.extsep + ext
 #-------------------------------------------------------------------------------
-def pexec(cmd):
-    p = subprocess.Popen( cmd.split(), universal_newlines = True,
+def pexec(cmd, wdir = os.curdir):
+    p = subprocess.Popen(cmd.split(),
+                         cwd = wdir,
+                         universal_newlines = True,
                          stdin    = subprocess.PIPE,
                          stdout   = subprocess.PIPE,
                          stderr   = subprocess.PIPE,

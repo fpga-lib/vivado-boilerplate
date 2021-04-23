@@ -22,8 +22,8 @@ dirs = import_config('dirpath.yml')
 ConfigName = cfg.NAME
 DEVICE     = cfg.DEVICE
 
-#ip       = ['pll', 'pcie']
-ip       = ['pcie']
+ip       = ['pll', 'pcie']
+#ip       = ['pcie']
 
 #-------------------------------------------------------------------------------
 #
@@ -173,20 +173,10 @@ def ip_create(target, source, env):
     else:
         os.makedirs(trg_dir)
         
-
-    curdir = os.path.abspath(os.curdir)
-    os.chdir(trg_dir)
-    print(os.path.abspath(os.curdir))
     cmd = env['VIVADO'] + ' -mode batch ' + flags + ' -log ' + logfile + ' -source ' + src
     #print(cmd)
-    rcode = pexec(cmd)
-    os.chdir(curdir)
-    
-    if rcode:
-        print('rcode: ', rcode)
-        sys.exit(2)
+    rcode = pexec(cmd, trg_dir)
     return rcode
-        
         
 #    pexec('touch ' + str(target[0]))
 
@@ -205,13 +195,9 @@ def ip_synthesize(target, source, env):
     
     print('synthesize IP core \'' + ip_name + '\'')
 
-    curdir = os.path.abspath(os.curdir)
-    os.chdir(trg_dir)
-    print(os.path.abspath(os.curdir))
     cmd = env['VIVADO'] + ' -mode batch ' + flags + ' -log ' + logfile + ' -source ' + src
     #print(cmd)
-    rcode = pexec(cmd)
-    os.chdir(curdir)
+    rcode = pexec(cmd, trg_dir)
     return rcode
     
 #    pexec('touch ' + str(target[0]))
@@ -243,14 +229,13 @@ def scan_cfg_files(node, env, path):
         
     else:
         return env.File([])
+    
 #---------------------------------------------------------------------
     
 #-------------------------------------------------------------------------------
 #
 #    Create scanners
 #
-    
-    
 CfgImportScanner = Scanner(name          = 'CfgImportScanner',
                            function      = scan_cfg_files,
                            skeys         = ['.' + ext.IP_CONFIG],
