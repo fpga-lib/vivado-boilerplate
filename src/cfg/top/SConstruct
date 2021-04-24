@@ -15,7 +15,7 @@ from utils import *
 #
 #    General Settings
 #
-cfg  = import_config('cfg.yml')
+cfg  = import_config('main.yml')
 ext  = import_config('filetype.yml')
 dirs = import_config('dirpath.yml')
 
