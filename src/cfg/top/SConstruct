@@ -267,10 +267,10 @@ IpSyn          = Builder(action     = ip_synthesize,
 
 env['BUILDERS'] = \
 {
-    'IP_CREATE_SCRIPT' : IpCreateScript,
-    'IP_SYN_SCRIPT'    : IpSynScript,
-    'IP_CREATE'        : IpCreate,
-    'IP_SYN'           : IpSyn
+    'IpCreateScript' : IpCreateScript,
+    'IpSynScript'    : IpSynScript,
+    'IpCreate'       : IpCreate,
+    'IpSyn'          : IpSyn
 }
                    
 #-------------------------------------------------------------------------------
@@ -317,7 +317,7 @@ for i in ip:
                                             '.'+ext.IP_CONFIG, 
                                             '-create.'+ext.TOOL_SCRIPT, 
                                             dirs.IP_SCRIPT,
-                                            env.IP_CREATE_SCRIPT)
+                                            env.IpCreateScript)
     ipcs.append(ip_create_script_nodes)
 
     # Generating synthesize IP script targets
@@ -325,7 +325,7 @@ for i in ip:
                                          '-create.'+ext.TOOL_SCRIPT, 
                                          '-syn.'+ext.TOOL_SCRIPT, 
                                          dirs.IP_SCRIPT,
-                                         env.IP_SYN_SCRIPT)
+                                         env.IpSynScript)
     ipss.append(ip_syn_script_nodes)
     
     # Creating IP core targets
@@ -333,7 +333,7 @@ for i in ip:
                               '-create.'+ext.TOOL_SCRIPT, 
                               '.'+ext.IP_CORE, 
                               os.path.join( dirs.IP_OOC, i, i ),
-                              env.IP_CREATE)
+                              env.IpCreate)
 
     ip_xci.append(ip_nodes)
     
@@ -342,7 +342,7 @@ for i in ip:
                                       '-syn.'+ext.TOOL_SCRIPT, 
                                       '.'+ext.DESIGN_CHECKPOINT, 
                                       os.path.join( dirs.IP_OOC, i, i ),
-                                      env.IP_SYN)
+                                      env.IpSyn)
     
     ip_dcp.append(ip_ooc_syn_nodes)
 #Default(ip_create_script_nodes)
