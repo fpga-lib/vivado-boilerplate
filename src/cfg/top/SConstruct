@@ -166,12 +166,9 @@ def ip_create(target, source, env):
     flags   = env['VIVADO_FLAGS']
     
     print('create IP core     \'' + ip_name + '\'')
-    
-    if os.path.exists(trg_dir):
-        shutil.rmtree(trg_dir)
-        os.makedirs(trg_dir)
-    else:
-        os.makedirs(trg_dir)
+        
+    Execute( Delete(trg_dir) )        
+    Execute( Mkdir(trg_dir) )
         
     cmd = env['VIVADO'] + ' -mode batch ' + flags + ' -log ' + logfile + ' -source ' + src
     #print(cmd)
