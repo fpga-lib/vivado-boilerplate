@@ -90,22 +90,27 @@ def eval_cfg_dict(cfg_dict: dict, imps=None) -> dict:
     for key in cfg_dict:
         if type(cfg_dict[key]) == str:
             if cfg_dict[key][0] == '=':
-                cfg_dict[key] = eval(cfg_dict[key][1:])       # evaluate new dict value
+                cfg_dict[key] = eval(cfg_dict[key][1:])            # evaluate new dict value
                 if type(cfg_dict[key]) == str:
-                    exec(key + ' = "' + str(cfg_dict[key]) + '"')   # update local variable
+                    exec(key + ' = "' + str(cfg_dict[key]) + '"')  # update local variable
                 else:
-                    exec(key + ' = ' + str(cfg_dict[key]))   # update local variable
+                    exec(key + ' = ' + str(cfg_dict[key]))         # update local variable
                 
     return cfg_dict
 
 #-------------------------------------------------------------------------------
-def read_config(fn: str, param_sect='parameters', as_class = False):
+def read_config(fn: str, param_sect='parameters', search_root=''):
 
     #print('read config:', fn)
     
+    #print('read_config working path:', os.path.abspath(os.curdir))
+    
     fname = os.path.basename(fn)
     
-    full_path = glob.glob( os.path.join('**', fname) )
+    if os.path.exists(fn):
+        full_path = str.split(fn)
+    else:
+        full_path = glob.glob( os.path.join(search_root, '**', fname) )
     
     if not len(full_path):
         print('E: config file not found:', fn)
@@ -124,7 +129,7 @@ def read_config(fn: str, param_sect='parameters', as_class = False):
 
         for i in imports:
             imp_fn = i + '.yml'                         # file name of imported data
-            imps[i] = read_config(imp_fn)
+            imps[i] = read_config(imp_fn, search_root=search_root)
            # print('read ', imp_fn, ':', imps[i])
                 
     params = cfg[param_sect]
@@ -136,9 +141,9 @@ def read_config(fn: str, param_sect='parameters', as_class = False):
 def import_config(fn: str):
     return Dict2Class( read_config(fn) )
 #-------------------------------------------------------------------------------
-def read_ip_config(fn: str, param_sect):
+def read_ip_config(fn, param_sect, search_root=''):
 
-    cfg_params = read_config(fn, param_sect)
+    cfg_params = read_config(fn, param_sect, search_root)
     
     with open( fn ) as f:
         cfg = yaml.safe_load(f)

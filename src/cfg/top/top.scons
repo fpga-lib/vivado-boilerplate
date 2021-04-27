@@ -1,20 +1,14 @@
-
-
 import os
 import sys
 import subprocess
 import re
 import shutil
 
-sys.dont_write_bytecode = True
 
 from utils import *
 
+Import('env')
 
-#-------------------------------------------------------------------------------
-#
-#    General Settings
-#
 cfg  = import_config('main.yml')
 ext  = import_config('filetype.yml')
 dirs = import_config('dirpath.yml')
@@ -23,26 +17,22 @@ ConfigName = cfg.NAME
 DEVICE     = cfg.DEVICE
 
 ip       = ['pll', 'pcie']
-#ip       = ['pcie']
+
 
 #-------------------------------------------------------------------------------
 #
 #    Environment
 #
-env = Environment( tools = {} )
 
+env['CFG_PATH'] = os.path.abspath(os.curdir)
 env['SETTINGS_SEARCH_PATH'] = [(dirs.CFG_SETTINGS)]
 
 XILINX_VIVADO = os.environ['XILINX_VIVADO']
+MENTOR        = os.environ['MENTOR']
 
 env['VIVADO']       = os.path.join(XILINX_VIVADO, 'bin', 'vivado')
 env['VIVADO_FLAGS'] = ' -notrace -nojournal '
-
-#-------------------------------------------------------------------------------
-#
-#    Project Structure
-#
-
+env['QUESTA']       = os.path.join(MENTOR, 'questa', 'questasim', 'bin')
 
 
 #-------------------------------------------------------------------------------
@@ -64,7 +54,7 @@ def ip_create_script(target, source, env):
     param_sect = 'config'
     
     ip_name = os.path.splitext( os.path.basename(src) )[0]   # derive IP name from full path 
-    ip_cfg  = read_ip_config(src, param_sect)
+    ip_cfg  = read_ip_config(src, param_sect, env['CFG_PATH'])
     
     title_text =\
     'IP core "' + ip_name + '" creating script' + os.linesep*2 + \
@@ -170,9 +160,15 @@ def ip_create(target, source, env):
     Execute( Delete(trg_dir) )        
     Execute( Mkdir(trg_dir) )
         
-    cmd = env['VIVADO'] + ' -mode batch ' + flags + ' -log ' + logfile + ' -source ' + src
+    cmd = env['VIVADO'] + ' -mode batch ' + flags + ' -log ' + logfile + ' -source ' + os.path.abspath(src)
     #print(cmd)
+
     rcode = pexec(cmd, trg_dir)
+    if rcode: 
+        return rcode
+    
+    cmd = os.path.join(env['QUESTA'], 'vlog') + ' -work simlib -O5 -sv -mfcu '
+    
     return rcode
         
 #    pexec('touch ' + str(target[0]))
@@ -192,7 +188,7 @@ def ip_synthesize(target, source, env):
     
     print('synthesize IP core \'' + ip_name + '\'')
 
-    cmd = env['VIVADO'] + ' -mode batch ' + flags + ' -log ' + logfile + ' -source ' + src
+    cmd = env['VIVADO'] + ' -mode batch ' + flags + ' -log ' + logfile + ' -source ' + os.path.abspath(src)
     #print(cmd)
     rcode = pexec(cmd, trg_dir)
     return rcode
@@ -209,7 +205,6 @@ def ip_synthesize(target, source, env):
 #
 def scan_cfg_files(node, env, path):
     
-#    print('scan node:', str(node))    
     fname = str(node)
     with open(fname) as f:
         cfg = yaml.safe_load(f)
@@ -218,17 +213,23 @@ def scan_cfg_files(node, env, path):
         imports = []
         for i in cfg['import'].split():
             fn = i + '.' + ext.CONFIG
-            full_path = glob.glob(os.path.join('**', fn))
-            imports += full_path
-        
-        #print(imports)
+            found = False
+            for p in path:
+                full_path = os.path.join(p.path, fn)
+                if os.path.exists(full_path):
+                    imports.append(full_path)
+                    found = True
+                    break
+
+            if not found:
+                print('E: import config file', fn, 'not found')
+                    
         return env.File(imports)
         
     else:
         return env.File([])
     
 #---------------------------------------------------------------------
-    
 #-------------------------------------------------------------------------------
 #
 #    Create scanners
@@ -293,7 +294,7 @@ def make_trg_nodes(src, src_suffix, trg_suffix, trg_dir, builder):
     trg      = os.path.join(trg_dir, trg_name)
     trg_list = builder(trg, src)
         
-    Depends(trg_list, 'SConstruct')
+    Depends(trg_list, 'top.scons')
     return trg_list
 
 #---------------------------------------------------------------------
@@ -343,9 +344,12 @@ for i in ip:
     
     ip_dcp.append(ip_ooc_syn_nodes)
 #Default(ip_create_script_nodes)
-Default(ip_dcp)
 #-------------------------------------------------------------------------------
-
+env.Alias('ipcs', ipcs)
+env.Alias('ipss', ipss)
+env.Alias('ip_xci', ip_xci)
+env.Alias('ip_dcp', ip_dcp  )
+Default(ip_dcp)
 
 
 #-------------------------------------------------------------------------------
