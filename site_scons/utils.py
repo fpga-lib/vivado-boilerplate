@@ -185,4 +185,13 @@ def generate_footer(comment: str) -> str:
 
     return  empty_line + separator
 #-------------------------------------------------------------------------------
+def get_ip_name(node, suffix):
+    
+    if type(node) != str:
+        path = str(node[0])
+    name = os.path.split(path)[1]
+    ip_name = name.replace(suffix, '')
+    
+    return ip_name
+#-------------------------------------------------------------------------------
 
