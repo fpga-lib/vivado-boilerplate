@@ -14,6 +14,27 @@ from utils import *
 
 #-------------------------------------------------------------------------------
 #
+#    Help info
+#
+Help("""
+********************************************************************************     
+Xilinx Vivado Non-Project Flow
+    
+    Available configurations:
+    ~~~~~~~~~~~~~~~~~~~~~~~~ 
+        top (default)
+        slon
+        ac701
+        all
+     
+    Usage:
+    ~~~~~  
+    scons [cfg=<cfg-name>] [targets]
+"""
+)
+
+#-------------------------------------------------------------------------------
+#
 #    General Settings
 #
 #ip       = ['pcie']
@@ -38,19 +59,4 @@ env = Environment( tools = ['vivado-npf'] )
 SConscript('src/cfg/top/top.scons', exports='env')
 
 
-Help("""
-Xilinx Vivado Non-Project Flow
-    
-    Available configurations:
-    ~~~~~~~~~~~~~~~~~~~~~~~~ 
-        top (default)
-        slon
-        ac701
-        all
-     
-    Usage:
-    ~~~~~  
-    scons [cfg=<cfg-name>] [targets]
-     
-"""
-)
+
