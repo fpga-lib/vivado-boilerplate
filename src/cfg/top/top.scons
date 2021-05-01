@@ -378,11 +378,11 @@ env.Alias('ip_xci', ip_xci)
 env.Alias('ip_dcp', ip_dcp  )
 Default(ip_dcp)
 
-
 #-------------------------------------------------------------------------------
 for i in dirs.OUTPUT:
     if not os.path.exists(i):
         print('scons: create directory "' + i + '"')
         os.makedirs(i)
+
 #-------------------------------------------------------------------------------
 
