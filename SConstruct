@@ -47,14 +47,14 @@ print('variant:', variant)
 #
 #    Environment
 #
-env = Environment() #( tools = {} )
+envNpf = Environment() #( tools = {} )
 
-env.Tool('vivado-npf')
+envNpf.Tool('vivado-npf')
 
 #-------------------------------------------------------------------------------
 #
 #    Project Structure
 #
 
-SConscript('src/cfg/top/top.scons', exports='env')
+SConscript('src/cfg/top/top.scons', exports='envNpf')
 

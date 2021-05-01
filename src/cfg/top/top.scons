@@ -7,7 +7,8 @@ import yaml
 
 #from utils import *
 
-Import('env')
+Import('envNpf')
+
 
 cfg  = import_config('main.yml')
 ext  = import_config('filetype.yml')
@@ -26,15 +27,15 @@ create_dirs(dirs.OUTPUT)
 #    Environment
 #
 
-env['CFG_PATH'] = os.path.abspath(os.curdir)
-env['SETTINGS_SEARCH_PATH'] = [(dirs.CFG_SETTINGS)]
+envNpf['CFG_PATH'] = os.path.abspath(os.curdir)
+envNpf['SETTINGS_SEARCH_PATH'] = [(dirs.CFG_SETTINGS)]
 
 XILINX_VIVADO = os.environ['XILINX_VIVADO']
 MENTOR        = os.environ['MENTOR']
 
-env['VIVADO']       = os.path.join(XILINX_VIVADO, 'bin', 'vivado')
-env['VIVADO_FLAGS'] = ' -notrace -nojournal '
-env['QUESTA']       = os.path.join(MENTOR, 'questa', 'questasim', 'bin')
+envNpf['VIVADO']       = os.path.join(XILINX_VIVADO, 'bin', 'vivado')
+envNpf['VIVADO_FLAGS'] = ' -notrace -nojournal '
+envNpf['QUESTA']       = os.path.join(MENTOR, 'questa', 'questasim', 'bin')
 
 
 #-------------------------------------------------------------------------------
@@ -276,7 +277,7 @@ Builders = {
     'IpSyn'          : IpSyn
 }
   
-env.Append(BUILDERS = Builders)
+envNpf.Append(BUILDERS = Builders)
                  
 #-------------------------------------------------------------------------------
 #
