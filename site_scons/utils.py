@@ -159,12 +159,12 @@ def read_ip_config(fn, param_sect, search_root=''):
 #-------------------------------------------------------------------------------
 def generate_title(text: str, comment: str) -> str:
     
-    hsep_len = 80 - len(comment)
+    hsep_len = 81 - len(comment)
     
-    empty_line   = comment + '*' + os.linesep
-    title_header = comment + '*'*hsep_len + os.linesep + empty_line
+    empty_line   = comment + os.linesep
+    title_header = comment + '-'*hsep_len + os.linesep + empty_line
 
-    title_body = comment + '*' +  (4 - len(comment))*' '
+    title_body = comment +  (4 - len(comment))*' '
     
     title_footer = empty_line + comment + '-'*hsep_len + os.linesep
     
@@ -180,10 +180,10 @@ def generate_title(text: str, comment: str) -> str:
 #-------------------------------------------------------------------------------
 def generate_footer(comment: str) -> str:
 
-    hsep_len = 80 - len(comment)
+    hsep_len = 81 - len(comment)
 
     empty_line = ' ' + os.linesep
-    separator  = comment + '*'*hsep_len + os.linesep
+    separator  = comment + '-'*hsep_len + os.linesep
 
     return  empty_line + separator
 #-------------------------------------------------------------------------------
