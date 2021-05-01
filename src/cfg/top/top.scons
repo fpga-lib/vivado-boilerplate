@@ -1,11 +1,4 @@
 import os
-import sys
-import subprocess
-import re
-import shutil
-import yaml
-
-#from utils import *
 
 
 ip       = ['pll', 'pcie']
