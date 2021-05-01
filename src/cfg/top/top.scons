@@ -19,6 +19,8 @@ DEVICE     = cfg.DEVICE
 ip       = ['pll', 'pcie']
 
 
+create_dirs(dirs.OUTPUT)
+
 #-------------------------------------------------------------------------------
 #
 #    Environment
@@ -299,10 +301,10 @@ def make_trg_nodes(src, src_suffix, trg_suffix, trg_dir, builder):
 #    Processing OOC IP targets
 #
 
-ipcs   = []      # IP Create Scripts
-ipss   = []      # IP Synth Scripts
-ip_xci = []
-ip_dcp = []      
+#ipcs   = []      # IP Create Scripts
+#ipss   = []      # IP Synth Scripts
+#ip_xci = []
+#ip_dcp = []
 
 def ip_create_script(src):
     res = []
@@ -380,12 +382,6 @@ env.Alias('ipss', ipss)
 env.Alias('ip_xci', ip_xci)
 env.Alias('ip_dcp', ip_dcp  )
 Default(ip_dcp)
-
-#-------------------------------------------------------------------------------
-for i in dirs.OUTPUT:
-    if not os.path.exists(i):
-        print('scons: create directory "' + i + '"')
-        os.makedirs(i)
 
 #-------------------------------------------------------------------------------
 Help("""

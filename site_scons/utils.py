@@ -15,6 +15,8 @@ import re
 import glob
 import yaml
 
+from SCons.Script import *
+
 #-------------------------------------------------------------------------------
 # 
 # 
@@ -193,5 +195,11 @@ def get_ip_name(node, suffix):
     ip_name = name.replace(suffix, '')
     
     return ip_name
+#-------------------------------------------------------------------------------
+def create_dirs(dirs):
+    for i in dirs:
+        if not os.path.exists(i):
+            Execute( Mkdir(i) )
+    
 #-------------------------------------------------------------------------------
 
