@@ -47,9 +47,9 @@ print('variant:', variant)
 #
 #    Environment
 #
-env = Environment( tools = ['vivado-npf'] )
+env = Environment() #( tools = {} )
 
-
+env.Tool('vivado-npf')
 
 #-------------------------------------------------------------------------------
 #
@@ -57,6 +57,4 @@ env = Environment( tools = ['vivado-npf'] )
 #
 
 SConscript('src/cfg/top/top.scons', exports='env')
-
-
 
