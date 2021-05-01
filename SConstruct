@@ -26,7 +26,7 @@ print('variant:', variant)
 #
 #    Environment
 #
-env = Environment( tools = {} )
+env = Environment( tools = ['vivado-npf'] )
 
 
 
@@ -38,4 +38,19 @@ env = Environment( tools = {} )
 SConscript('src/cfg/top/top.scons', exports='env')
 
 
-
+Help("""
+Xilinx Vivado Non-Project Flow
+    
+    Available configurations:
+    ~~~~~~~~~~~~~~~~~~~~~~~~ 
+        top (default)
+        slon
+        ac701
+        all
+     
+    Usage:
+    ~~~~~  
+    scons [cfg=<cfg-name>] [targets]
+     
+"""
+)
