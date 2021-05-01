@@ -1,0 +1,75 @@
+import os
+import sys
+import subprocess
+import re
+import shutil
+import yaml
+
+#from utils import *
+
+
+ip       = ['pll', 'pcie']
+
+#-------------------------------------------------------------------------------
+#
+#    Configuration
+#
+cfg  = import_config('main.yml')
+ext  = import_config('filetype.yml')
+dirs = import_config('dirpath.yml')
+
+ConfigName = cfg.NAME
+DEVICE     = cfg.DEVICE
+
+create_dirs(dirs.OUTPUT)
+
+#-------------------------------------------------------------------------------
+#
+#    Environment
+#
+Import('envNpf')
+
+envNpf.Append(CFG  = cfg)
+envNpf.Append(EXT  = ext)
+envNpf.Append(DIRS = dirs)
+
+envNpf.Tool('vivado-npf')
+
+envNpf['CFG_PATH'] = os.path.abspath(os.curdir)
+envNpf['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]
+
+
+envNpf.Append(SYNFLAGS = ' -notrace')
+envNpf.Append(SYNFLAGS = ' -nojournal')
+
+#-------------------------------------------------------------------------------
+#
+#    Targets
+#
+ipcs   = envNpf.IpCreateScripts(ip)
+ipss   = envNpf.IpSynScripts(ip)
+ip_xci = envNpf.CreateIps(ipcs)
+ip_dcp = envNpf.SynIps(ipss, ip_xci)
+
+#-------------------------------------------------------------------------------
+envNpf.Alias('ipcs',   ipcs)
+envNpf.Alias('ipss',   ipss)
+envNpf.Alias('ip_xci', ip_xci)
+envNpf.Alias('ip_dcp', ip_dcp)
+Default(ip_dcp)
+
+#-------------------------------------------------------------------------------
+#
+#    Info
+#
+Help("""
+    Configuration 'top' available targets:
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ipcs   : IP Create Scripts
+        ipss   : IP Synthesize Scripts
+        ip_xci : Create IPs
+        ip_dcp : Create IP design checkpoints by sythisizing of 'xci's
+********************************************************************************     
+""")
+#-------------------------------------------------------------------------------
+

@@ -180,5 +180,10 @@
                 Excludes=""
                 L="1"/>
         </Folder>
+        <F
+            N="*"
+            Recurse="1"
+            Excludes=".git"
+            L="1"/>
     </Files>
 </Project>

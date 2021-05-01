@@ -1,5 +1,6 @@
 
 .sconsign.dblite
+__pycache__
 build
 *.vpwhistu
 *.vtg
