@@ -101,7 +101,8 @@ def ip_create_script(target, source, env):
     
     with open(trg, 'w') as ofile:
         ofile.write(out)
-    
+
+    return None
 #---------------------------------------------------------------------
 #
 #    Build Tcl script to synthesize OOC IP
@@ -143,6 +144,7 @@ def ip_syn_script(target, source, env):
     with open(trg, 'w') as ofile:
         ofile.write(out)
 
+    return None
 #---------------------------------------------------------------------
 #
 #    Generate IP
@@ -173,7 +175,7 @@ def ip_create(target, source, env):
     return rcode
         
 #    pexec('touch ' + str(target[0]))
-
+    return None
 #---------------------------------------------------------------------
 #
 #    Run OOC IP synthesis
@@ -197,6 +199,7 @@ def ip_synthesize(target, source, env):
     
 #    pexec('touch ' + str(target[0]))
 
+    return None
 #-------------------------------------------------------------------------------
 #
 #    Scanners
@@ -264,15 +267,15 @@ IpSyn          = Builder(action     = ip_synthesize,
                          suffix     = ext.DESIGN_CHECKPOINT,
                          src_suffix = ext.IP_CORE)
 
-env['BUILDERS'] = \
-{
+Builders = {
     'IpCreateScript' : IpCreateScript,
     'IpSynScript'    : IpSynScript,
     'IpCreate'       : IpCreate,
     'IpSyn'          : IpSyn
 }
-                   
-
+  
+env.Append(BUILDERS = Builders)
+                 
 #-------------------------------------------------------------------------------
 #
 #    Targets
