@@ -49,7 +49,6 @@ print('variant:', variant)
 #
 envNpf = Environment() #( tools = {} )
 
-envNpf.Tool('vivado-npf')
 
 #-------------------------------------------------------------------------------
 #
