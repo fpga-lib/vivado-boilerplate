@@ -17,6 +17,11 @@ dirs = import_config('dirpath.yml')
 ConfigName = cfg.NAME
 DEVICE     = cfg.DEVICE
 
+envNpf.Append(CFG  = cfg)
+envNpf.Append(EXT  = ext)
+envNpf.Append(DIRS = dirs)
+
+
 ip       = ['pll', 'pcie']
 
 
@@ -28,7 +33,7 @@ create_dirs(dirs.OUTPUT)
 #
 
 envNpf['CFG_PATH'] = os.path.abspath(os.curdir)
-envNpf['SETTINGS_SEARCH_PATH'] = [(dirs.CFG_SETTINGS)]
+envNpf['SETTINGS_SEARCH_PATH'] = [(envNpf['DIRS'].CFG_SETTINGS)]
 
 XILINX_VIVADO = os.environ['XILINX_VIVADO']
 MENTOR        = os.environ['MENTOR']
@@ -307,8 +312,10 @@ def make_trg_nodes(src, src_suffix, trg_suffix, trg_dir, builder):
 #ip_xci = []
 #ip_dcp = []
 
-def ip_create_script(src):
-    res = []
+def ip_create_scripts(env, src):
+    ext     = env['EXT']
+    dirs    = env['DIRS']
+    res     = []
     src_sfx = '.'+ext.IP_CONFIG
     trg_sfx = '-create.'+ext.TOOL_SCRIPT
     trg_dir = dirs.IP_SCRIPT
@@ -320,8 +327,10 @@ def ip_create_script(src):
     return res
 
 
-def ip_syn_script(src):
-    res = []
+def ip_syn_scripts(env, src):
+    ext     = env['EXT']
+    dirs    = env['DIRS']
+    res     = []
     src_sfx = '.'+ext.IP_CONFIG
     trg_sfx = '-syn.'+ext.TOOL_SCRIPT
     trg_dir = dirs.IP_SCRIPT
@@ -333,8 +342,10 @@ def ip_syn_script(src):
     return res
 
 
-def ip_create(src):
-    res = []
+def create_ips(env, src):
+    ext     = env['EXT']
+    dirs    = env['DIRS']
+    res     = []
     src_sfx = '-create.'+ext.TOOL_SCRIPT
     trg_sfx = '.'+ext.IP_CORE
     builder = env.IpCreate
@@ -345,7 +356,7 @@ def ip_create(src):
 
     return res
 
-def ip_syn(src, deps=None):
+def syn_ips(env, src, deps=None):
     if deps:
         if len(src) != len(deps):
             print('E: ip_syn: src count:', len(src), 'must be equal deps count:', len(deps))
@@ -356,11 +367,13 @@ def ip_syn(src, deps=None):
         print('E: ip_syn: "deps" argument (typically xci IP Core node list) not specified')
         sys.exit(2)
 
-    res = []
+    ext         = env['EXT']
+    dirs        = env['DIRS']
+    res         = []
     script_sfx  = '-syn.'+ext.TOOL_SCRIPT
     ip_core_sfx = '.' + ext.IP_CORE
-    trg_sfx = '.'+ext.DESIGN_CHECKPOINT
-    builder = env.IpSyn
+    trg_sfx     = '.'+ext.DESIGN_CHECKPOINT
+    builder     = env.IpSyn
     for i in src:
         s = i[0]
         d = i[1]
@@ -372,16 +385,21 @@ def ip_syn(src, deps=None):
 
     return res
 
-ipcs   = ip_create_script(ip)
-ipss   = ip_syn_script(ip)
-ip_xci = ip_create(ipcs)
-ip_dcp = ip_syn(ipss, ip_xci)
+envNpf.AddMethod(ip_create_scripts, 'IpCreateScripts')
+envNpf.AddMethod(ip_syn_scripts,    'IpSynScripts')
+envNpf.AddMethod(create_ips,        'CreateIps')
+envNpf.AddMethod(syn_ips,           'SynIps')
+
+ipcs   = envNpf.IpCreateScripts(ip)
+ipss   = envNpf.IpSynScripts(ip)
+ip_xci = envNpf.CreateIps(ipcs)
+ip_dcp = envNpf.SynIps(ipss, ip_xci)
 
 #-------------------------------------------------------------------------------
-env.Alias('ipcs', ipcs)
-env.Alias('ipss', ipss)
-env.Alias('ip_xci', ip_xci)
-env.Alias('ip_dcp', ip_dcp  )
+envNpf.Alias('ipcs', ipcs)
+envNpf.Alias('ipss', ipss)
+envNpf.Alias('ip_xci', ip_xci)
+envNpf.Alias('ip_dcp', ip_dcp  )
 Default(ip_dcp)
 
 #-------------------------------------------------------------------------------
