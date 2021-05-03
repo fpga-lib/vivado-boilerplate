@@ -28,7 +28,7 @@ def namegen(fullpath, ext):
 #-------------------------------------------------------------------------------
 def pexec(cmd, wdir = os.curdir):
     p = subprocess.Popen(cmd.split(),
-                         cwd = wdir,
+                         cwd = str(wdir),
                          universal_newlines = True,
                          stdin    = subprocess.PIPE,
                          stdout   = subprocess.PIPE,
@@ -195,6 +195,12 @@ def get_ip_name(node, suffix):
     ip_name = name.replace(suffix, '')
     
     return ip_name
+#-------------------------------------------------------------------------------
+def get_name(path):
+    return os.path.splitext( os.path.basename(path) )[0]
+#-------------------------------------------------------------------------------
+def drop_suffix(name):
+    return os.path.splitext(name)[0]
 #-------------------------------------------------------------------------------
 def create_dirs(dirs):
     for i in dirs:
