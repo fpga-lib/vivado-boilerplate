@@ -2,15 +2,8 @@
 
 import os
 import sys
-import subprocess
-import re
-import shutil
 
 sys.dont_write_bytecode = True
-
-from utils import *
-
-#print(GetLaunchDir())
 
 #-------------------------------------------------------------------------------
 #
@@ -37,7 +30,6 @@ Xilinx Vivado Non-Project Flow
 #
 #    General Settings
 #
-#ip       = ['pcie']
 
 variant = ARGUMENTS.get('variant', 'top')
 
@@ -52,8 +44,19 @@ envNpf = Environment() #( tools = {} )
 
 #-------------------------------------------------------------------------------
 #
-#    Project Structure
+#    Project configurations
 #
 
 SConscript('src/cfg/top/top.scons', exports='envNpf')
+#-------------------------------------------------------------------------------
+
+if 'dump' in ARGUMENTS:
+    env_key = ARGUMENTS[ 'dump' ]
+    if env_key == 'env':
+        print( envNpf.Dump() )
+    else:
+        print( envNpf.Dump(key = env_key) )
+
+
+#-------------------------------------------------------------------------------
 
