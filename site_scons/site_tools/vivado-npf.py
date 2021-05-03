@@ -34,15 +34,18 @@ def ip_create_script(target, source, env):
     ext  = env['EXT']
     dirs = env['DIRS']
 
-    src = str(source[0])
-    trg = str(target[0])
+    src = source[0]
+    trg = target[0]
+    
+    src_path = str(src)
+    trg_path = str(trg)
 
-    print('generate script:   \'' + os.path.basename(trg) + '\'')
+    print('generate script:   \'' + trg.name + '\'')
 
     param_sect = 'config'
 
-    ip_name = os.path.splitext( os.path.basename(src) )[0]   # derive IP name from full path 
-    ip_cfg  = read_ip_config(src, param_sect, env['CFG_PATH'])
+    ip_name = drop_suffix(src.name)
+    ip_cfg  = read_ip_config(src_path, param_sect, env['CFG_PATH'])
 
     title_text =\
     'IP core "' + ip_name + '" creating script' + os.linesep*2 + \
@@ -80,12 +83,11 @@ def ip_create_script(target, source, env):
     text += '-sync -force -quiet'                                   + os.linesep
     text += 'exit'
 
-
     out = generate_title(title_text, '#')
     out += text
     out += generate_footer('#')
 
-    with open(trg, 'w') as ofile:
+    with open(trg_path, 'w') as ofile:
         ofile.write(out)
 
     return None
@@ -99,16 +101,18 @@ def ip_syn_script(target, source, env):
     ext  = env['EXT']
     dirs = env['DIRS']
     
-    src = str(source[0])
-    trg = str(target[0])
+    src = source[0]
+    trg = target[0]
+    
+    src_path = str(src)
+    trg_path = str(trg)
 
-    print('generate script:   \'' + os.path.basename(trg) + '\'')
+    print('generate script:   \'' + trg.name + '\'')
 
-    with open(src) as src_f:
+    with open(src_path) as src_f:
         ip_create_script = src_f.read()
 
-   # ip_name = re.findall('set\s+ip_name\s+(\w+)', ip_create_script)[0] # derive IP name from IP create script
-    ip_name = os.path.splitext( os.path.basename(src) )[0]   # derive IP name from full path 
+    ip_name = drop_suffix(src.name)
 
     title_text =\
     'IP core "' + ip_name + '" synthesizing script' + os.linesep*2 + \
@@ -131,7 +135,7 @@ def ip_syn_script(target, source, env):
 
     #print(out)
 
-    with open(trg, 'w') as ofile:
+    with open(trg_path, 'w') as ofile:
         ofile.write(out)
 
     return None
@@ -141,17 +145,20 @@ def ip_syn_script(target, source, env):
 #
 def ip_create(target, source, env):
 
-    cfg  = env['CFG']
-    ext  = env['EXT']
-    dirs = env['DIRS']
+    cfg      = env['CFG']
+    ext      = env['EXT']
+    dirs     = env['DIRS']
 
-    src     = str(source[0])
-    trg     = str(target[0])
-    ip_name = os.path.splitext(os.path.basename(trg))[0]
-    trg_dir = os.path.join(dirs.IP_OOC, ip_name)
-    logfile = os.path.join(trg_dir, 'create.log')
+    src      = source[0]
+    trg      = target[0]
+    
+    src_path = str(src)
+    trg_path = str(trg)
+    ip_name  = drop_suffix(trg.name)
+    trg_dir  = os.path.join(dirs.IP_OOC, ip_name)
+    logfile  = os.path.join(trg_dir, 'create.log')
 
-    print('create IP core     \'' + ip_name + '\'')
+    print('create IP core     \'' + trg.name + '\'')
 
     Execute( Delete(trg_dir) )        
     Execute( Mkdir(trg_dir) )
@@ -160,7 +167,7 @@ def ip_create(target, source, env):
     cmd.append(env['SYNCOM'])
     cmd.append(env['SYNFLAGS'])
     cmd.append('-log ' + logfile)
-    cmd.append(' -source ' + os.path.abspath(src))
+    cmd.append(' -source ' + os.path.abspath(src_path))
     cmd = ' '.join(cmd)
     
     if env['VERBOSE']:
@@ -176,23 +183,26 @@ def ip_create(target, source, env):
 #
 def ip_synthesize(target, source, env):
 
-    cfg  = env['CFG']
-    ext  = env['EXT']
-    dirs = env['DIRS']
+    cfg      = env['CFG']
+    ext      = env['EXT']
+    dirs     = env['DIRS']
 
-    src     = str(source[0])
-    trg     = str(target[0])
-    ip_name = os.path.splitext(os.path.basename(trg))[0]
-    trg_dir = os.path.join(dirs.IP_OOC, ip_name)
-    logfile = os.path.join(trg_dir, 'syn.log')
+    src      = source[0]
+    trg      = target[0]
+    
+    src_path = str(src)
+    trg_path = str(trg)
+    ip_name  = drop_suffix(trg.name)
+    trg_dir  = os.path.join(dirs.IP_OOC, ip_name)
+    logfile  = os.path.join(trg_dir, 'syn.log')
 
-    print('synthesize IP core \'' + ip_name + '\'')
+    print('synthesize IP core \'' + trg.name + '\'')
 
     cmd = []
     cmd.append(env['SYNCOM'])
     cmd.append(env['SYNFLAGS'])
     cmd.append('-log ' + logfile)
-    cmd.append(' -source ' + os.path.abspath(src))
+    cmd.append(' -source ' + os.path.abspath(src_path))
     cmd = ' '.join(cmd)
 
     if env['VERBOSE']:
