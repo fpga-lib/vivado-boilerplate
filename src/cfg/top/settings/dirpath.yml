@@ -25,6 +25,5 @@ parameters:
                         BUILD_SIM, 
                         IP_OOC, 
                         IP_SCRIPT,
-                        IPSIM_SCRIPT,
-                        IPSIM_LIB]
+                        IPSIM_SCRIPT]
 
