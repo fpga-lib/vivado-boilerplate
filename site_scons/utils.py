@@ -59,6 +59,25 @@ def clog2(n: int) -> int:
 def max_str_len(x):
     return len(max(x, key=len))
 #-------------------------------------------------------------------------------
+def search_file(fn, search_root=''):
+    fname = os.path.basename(fn)
+    fpath = os.path.join(search_root, fname)
+
+    if os.path.exists(fpath):
+        full_path = str.split(fpath)
+    else:
+        full_path = glob.glob( os.path.join(search_root, '**', fname) )
+
+    if not len(full_path):
+        print('E: config file not found:', fn)
+        sys.exit(1)
+
+    if len(full_path) > 1:
+        print('E: duplicate config files:', full_path)
+        sys.exit(1)
+        
+    return full_path[0]
+#-------------------------------------------------------------------------------
 class Dict2Class(object):
 
     def __init__(self, in_dict, name=''):
@@ -103,26 +122,8 @@ def eval_cfg_dict(cfg_dict: dict, imps=None) -> dict:
 #-------------------------------------------------------------------------------
 def read_config(fn: str, param_sect='parameters', search_root=''):
 
-    #print('read config:', fn)
-    
-    #print('read_config working path:', os.path.abspath(os.curdir))
-    
-    fname = os.path.basename(fn)
-    
-    if os.path.exists(fn):
-        full_path = str.split(fn)
-    else:
-        full_path = glob.glob( os.path.join(search_root, '**', fname) )
-    
-    if not len(full_path):
-        print('E: config file not found:', fn)
-        sys.exit(1)
-    
-    if len(full_path) > 1:
-        print('E: duplicate config files:', full_path)
-        sys.exit(1)
-    
-    with open( full_path[0] ) as f:
+    path = search_file(fn, search_root)
+    with open( path ) as f:
         cfg = yaml.safe_load(f)
 
     imps = {}
@@ -156,6 +157,15 @@ def read_ip_config(fn, param_sect, search_root=''):
         
     return ip_cfg
 
+#-------------------------------------------------------------------------------
+def read_ipsim_config(fn: str, search_root):
+
+    path = search_file(fn, search_root)
+    with open( path ) as f:
+        cfg = yaml.safe_load(f)
+        
+    return cfg['sources']
+    
 #-------------------------------------------------------------------------------
 def generate_title(text: str, comment: str) -> str:
     
