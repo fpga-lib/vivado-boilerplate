@@ -103,7 +103,7 @@ def ipsim_scripts(env, src):
     dirs    = env['DIRS']
     res     = []
     src_sfx = '.'+ext.IP_CONFIG
-    trg_sfx = '-ipsim.'+ext.TOOL_SCRIPT
+    trg_sfx = '-ipsim.'+ext.SIM_SCRIPT
     trg_dir = dirs.IPSIM_SCRIPT
     builder = env.IpSimScript
     for i in src:
@@ -124,6 +124,7 @@ def generate(env):
     Builder = SCons.Builder.Builder
     
     env['VLOGCOM'] = os.path.join(QUESTA, 'vlog')
+    env['VLIBCOM'] = os.path.join(QUESTA, 'vlib')
     env['VMAPCOM'] = os.path.join(QUESTA, 'vmap')
     env['SIMCOM']  = os.path.join(QUESTA, 'vsim') + ' -c'
     env['SIMGUI']  = os.path.join(MENTOR, 'questa', 'questa.sh') + ' -gui'

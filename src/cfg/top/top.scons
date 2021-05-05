@@ -27,9 +27,11 @@ envNpf.Append(EXT  = ext)
 envNpf.Append(DIRS = dirs)
 
 envNpf.Tool('vivado-npf')
+envNpf.Tool('questa')
 
-envNpf['CFG_PATH'] = os.path.abspath(os.curdir)
+envNpf['CFG_PATH']             = os.path.abspath(os.curdir)
 envNpf['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]
+envNpf['IPSIM_CONFIG_PATH']    = dirs.SRC_IPSIM
 
 
 envNpf.Append(SYNFLAGS = ' -notrace')
@@ -44,12 +46,16 @@ ipss   = envNpf.IpSynScripts(ip)
 ip_xci = envNpf.CreateIps(ipcs)
 ip_dcp = envNpf.SynIps(ipss, ip_xci)
 
+ipsim_scripts = envNpf.IpSimScripts(ip)
+                       
 #-------------------------------------------------------------------------------
 envNpf.Alias('ipcs',   ipcs)
 envNpf.Alias('ipss',   ipss)
 envNpf.Alias('ip_xci', ip_xci)
 envNpf.Alias('ip_dcp', ip_dcp)
 Default(ip_dcp)
+
+envNpf.Alias('ipsim_scripts', ipsim_scripts)
 
 #-------------------------------------------------------------------------------
 #

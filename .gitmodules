@@ -1,0 +1,3 @@
+[submodule "lib/ipsim"]
+	path = lib/ipsim
+	url = https://github.com/fpga-lib/ipsim_xilinx.git
