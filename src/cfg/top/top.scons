@@ -20,42 +20,44 @@ create_dirs(dirs.OUTPUT)
 #
 #    Environment
 #
-Import('envNpf')
+Import('envx')
 
-envNpf.Append(CFG  = cfg)
-envNpf.Append(EXT  = ext)
-envNpf.Append(DIRS = dirs)
+envx.Append(CFG  = cfg)
+envx.Append(EXT  = ext)
+envx.Append(DIRS = dirs)
 
-envNpf.Tool('vivado-npf')
-envNpf.Tool('questa')
+envx.Tool('vivado')
+envx.Tool('questa')
 
-envNpf['CFG_PATH']             = os.path.abspath(os.curdir)
-envNpf['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]
-envNpf['IPSIM_CONFIG_PATH']    = dirs.SRC_IPSIM
+envx['CFG_PATH']             = os.path.abspath(os.curdir)
+envx['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]
+envx['IPSIM_CONFIG_PATH']    = dirs.SRC_IPSIM
 
 
-envNpf.Append(SYNFLAGS = ' -notrace')
-envNpf.Append(SYNFLAGS = ' -nojournal')
+envx.Append(SYNFLAGS = ' -notrace')
+envx.Append(SYNFLAGS = ' -nojournal')
 
 #-------------------------------------------------------------------------------
 #
 #    Targets
 #
-ipcs   = envNpf.IpCreateScripts(ip)
-ipss   = envNpf.IpSynScripts(ip)
-ip_xci = envNpf.CreateIps(ipcs)
-ip_dcp = envNpf.SynIps(ipss, ip_xci)
+ipcs   = envx.IpCreateScripts(ip)
+ipss   = envx.IpSynScripts(ip)
+ip_xci = envx.CreateIps(ipcs)
+ip_dcp = envx.SynIps(ipss, ip_xci)
 
-ipsim_scripts = envNpf.IpSimScripts(ip)
+ip_sls = envx.IpSimLibScripts(ip)
+simlib = envx.CompileSimlib(dirs.IPSIM_LIB, ip_sls)
                        
 #-------------------------------------------------------------------------------
-envNpf.Alias('ipcs',   ipcs)
-envNpf.Alias('ipss',   ipss)
-envNpf.Alias('ip_xci', ip_xci)
-envNpf.Alias('ip_dcp', ip_dcp)
+envx.Alias('ipcs',   ipcs)
+envx.Alias('ipss',   ipss)
+envx.Alias('ip_xci', ip_xci)
+envx.Alias('ip_dcp', ip_dcp)
 Default(ip_dcp)
 
-envNpf.Alias('ipsim_scripts', ipsim_scripts)
+envx.Alias('ip_sls', ip_sls)
+envx.Alias('simlib', simlib)
 
 #-------------------------------------------------------------------------------
 #

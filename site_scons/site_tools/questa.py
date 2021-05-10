@@ -131,6 +131,9 @@ def generate(env):
     
     env['VLOG_FLAGS']        = ' -incr -sv -mfcu'
     env['VLOG_OPTIMIZATION'] = ' -O5'
+    if 'vivado' in env['TOOLS']:
+        env['VOPT_FLAGS']        = ' glbl'
+    
 
     env['VERBOSE'] = True
     

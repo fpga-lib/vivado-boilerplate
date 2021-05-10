@@ -39,7 +39,7 @@ print('variant:', variant)
 #
 #    Environment
 #
-envNpf = Environment() #( tools = {} )
+envx = Environment() #( tools = {} )
 
 
 #-------------------------------------------------------------------------------
@@ -47,15 +47,15 @@ envNpf = Environment() #( tools = {} )
 #    Project configurations
 #
 
-SConscript('src/cfg/top/top.scons', exports='envNpf')
+SConscript('src/cfg/top/top.scons', exports='envx')
 #-------------------------------------------------------------------------------
 
 if 'dump' in ARGUMENTS:
     env_key = ARGUMENTS[ 'dump' ]
     if env_key == 'env':
-        print( envNpf.Dump() )
+        print( envx.Dump() )
     else:
-        print( envNpf.Dump(key = env_key) )
+        print( envx.Dump(key = env_key) )
 
 
 #-------------------------------------------------------------------------------
