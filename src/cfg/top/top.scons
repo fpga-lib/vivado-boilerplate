@@ -29,6 +29,8 @@ envx.Append(DIRS = dirs)
 envx.Tool('vivado')
 envx.Tool('questa')
 
+print(envx['VOPT_FLAGS'])
+
 envx['CFG_PATH']             = os.path.abspath(os.curdir)
 envx['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]
 envx['IPSIM_CONFIG_PATH']    = dirs.SRC_IPSIM
@@ -46,8 +48,8 @@ ipss   = envx.IpSynScripts(ip)
 ip_xci = envx.CreateIps(ipcs)
 ip_dcp = envx.SynIps(ipss, ip_xci)
 
-ip_sls = envx.IpSimLibScripts(ip)
-simlib = envx.CompileSimlib(dirs.IPSIM_LIB, ip_sls)
+ip_sls = envx.IpSimLibScripts(ip_xci)
+simlib = envx.CompileSimlib(dirs.IP_SIMLIB, ip_sls)
                        
 #-------------------------------------------------------------------------------
 envx.Alias('ipcs',   ipcs)
