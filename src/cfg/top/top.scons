@@ -43,23 +43,24 @@ envx.Append(SYNFLAGS = ' -nojournal')
 #
 #    Targets
 #
-ipcs   = envx.IpCreateScripts(ip)
-ipss   = envx.IpSynScripts(ip)
-ip_xci = envx.CreateIps(ipcs)
-ip_dcp = envx.SynIps(ipss, ip_xci)
+IP_Create_Scripts = envx.IpCreateScripts(ip)
+IP_Syn_Scripts    = envx.IpSynScripts(ip)
+IP_Cores          = envx.CreateIps(IP_Create_Scripts)
+IP_OOC_Syn        = envx.SynIps(IP_Syn_Scripts, IP_Cores)
 
-ip_sls = envx.IpSimLibScripts(ip_xci)
-simlib = envx.CompileSimlib(dirs.IP_SIMLIB, ip_sls)
+IP_Simlib_Scripts = envx.IpSimLibScripts(IP_Cores)
+IP_Simlib         = envx.CompileSimlib(dirs.IP_SIMLIB, IP_Simlib_Scripts)
                        
 #-------------------------------------------------------------------------------
-envx.Alias('ipcs',   ipcs)
-envx.Alias('ipss',   ipss)
-envx.Alias('ip_xci', ip_xci)
-envx.Alias('ip_dcp', ip_dcp)
-Default(ip_dcp)
+envx.Alias('ipcs',     IP_Create_Scripts)
+envx.Alias('ipss',     IP_Syn_Scripts)
+envx.Alias('ip_cores', IP_Cores)
+envx.Alias('ip_ooc',   IP_OOC_Syn)
 
-envx.Alias('ip_sls', ip_sls)
-envx.Alias('simlib', simlib)
+envx.Alias('ip_sls', IP_Simlib_Scripts)
+envx.Alias('simlib', IP_Simlib)
+
+Default(IP_Simlib)
 
 #-------------------------------------------------------------------------------
 #
@@ -68,10 +69,12 @@ envx.Alias('simlib', simlib)
 Help("""
     Configuration 'top' available targets:
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        ipcs   : IP Create Scripts
-        ipss   : IP Synthesize Scripts
-        ip_xci : Create IPs
-        ip_dcp : Create IP design checkpoints by sythisizing of 'xci's
+        ipcs     : IP Create Scripts
+        ipss     : IP Synthesize Scripts
+        ip_cores : Create IPs
+        ip_ooc   : Create IP design checkpoints by sythisizing of 'xci's
+        ip_sls   : IP Simlib Scripts
+        simlib   : IP Simlib (default)
 ********************************************************************************     
 """)
 #-------------------------------------------------------------------------------
