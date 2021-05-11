@@ -1,11 +1,4 @@
 import os
-import sys
-import subprocess
-import re
-import shutil
-import yaml
-
-#from utils import *
 
 
 ip       = ['pll', 'pcie']
@@ -27,36 +20,47 @@ create_dirs(dirs.OUTPUT)
 #
 #    Environment
 #
-Import('envNpf')
+Import('envx')
 
-envNpf.Append(CFG  = cfg)
-envNpf.Append(EXT  = ext)
-envNpf.Append(DIRS = dirs)
+envx.Append(CFG  = cfg)
+envx.Append(EXT  = ext)
+envx.Append(DIRS = dirs)
 
-envNpf.Tool('vivado-npf')
+envx.Tool('vivado')
+envx.Tool('questa')
 
-envNpf['CFG_PATH'] = os.path.abspath(os.curdir)
-envNpf['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]
+print(envx['VOPT_FLAGS'])
+
+envx['CFG_PATH']             = os.path.abspath(os.curdir)
+envx['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]
+envx['IPSIM_CONFIG_PATH']    = dirs.SRC_IPSIM
 
 
-envNpf.Append(SYNFLAGS = ' -notrace')
-envNpf.Append(SYNFLAGS = ' -nojournal')
+envx.Append(SYNFLAGS = ' -notrace')
+envx.Append(SYNFLAGS = ' -nojournal')
 
 #-------------------------------------------------------------------------------
 #
 #    Targets
 #
-ipcs   = envNpf.IpCreateScripts(ip)
-ipss   = envNpf.IpSynScripts(ip)
-ip_xci = envNpf.CreateIps(ipcs)
-ip_dcp = envNpf.SynIps(ipss, ip_xci)
+IP_Create_Scripts = envx.IpCreateScripts(ip)
+IP_Syn_Scripts    = envx.IpSynScripts(ip)
+IP_Cores          = envx.CreateIps(IP_Create_Scripts)
+IP_OOC_Syn        = envx.SynIps(IP_Syn_Scripts, IP_Cores)
 
+IP_Simlib_Scripts = envx.IpSimLibScripts(IP_Cores)
+IP_Simlib         = envx.CompileSimlib(dirs.IP_SIMLIB, IP_Simlib_Scripts)
+                       
 #-------------------------------------------------------------------------------
-envNpf.Alias('ipcs',   ipcs)
-envNpf.Alias('ipss',   ipss)
-envNpf.Alias('ip_xci', ip_xci)
-envNpf.Alias('ip_dcp', ip_dcp)
-Default(ip_dcp)
+envx.Alias('ipcs',     IP_Create_Scripts)
+envx.Alias('ipss',     IP_Syn_Scripts)
+envx.Alias('ip_cores', IP_Cores)
+envx.Alias('ip_ooc',   IP_OOC_Syn)
+
+envx.Alias('ip_sls', IP_Simlib_Scripts)
+envx.Alias('simlib', IP_Simlib)
+
+Default(IP_Simlib)
 
 #-------------------------------------------------------------------------------
 #
@@ -65,10 +69,12 @@ Default(ip_dcp)
 Help("""
     Configuration 'top' available targets:
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        ipcs   : IP Create Scripts
-        ipss   : IP Synthesize Scripts
-        ip_xci : Create IPs
-        ip_dcp : Create IP design checkpoints by sythisizing of 'xci's
+        ipcs     : IP Create Scripts
+        ipss     : IP Synthesize Scripts
+        ip_cores : Create IPs
+        ip_ooc   : Create IP design checkpoints by sythisizing of 'xci's
+        ip_sls   : IP Simlib Scripts
+        simlib   : IP Simlib (default)
 ********************************************************************************     
 """)
 #-------------------------------------------------------------------------------

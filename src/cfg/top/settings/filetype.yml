@@ -9,3 +9,4 @@ parameters:
     SYSTEMVERILOG        : sv
     VERILOG_HEADER       : vh
     SYSTEMVERILOG_HEADER : svh
+    SIM_SCRIPT           : do

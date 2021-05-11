@@ -1,5 +1,5 @@
 
 parameters:
-    OSC_FREQ  : 100      # MHz               
+    OSC_FREQ  : 200      # MHz               
 
 

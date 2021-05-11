@@ -2,24 +2,28 @@
 import  : main
 
 parameters:
-    ROOT         : = os.path.abspath('../../..')
-    LIB          : = os.path.join(ROOT,     'lib')
+    ROOT           : = os.path.abspath('../../..')
+    LIB            : = os.path.join(ROOT,    'lib')
+    SRC_IPSIM      : = os.path.join(LIB,     'ipsim')
+                   
+    SRC            : = os.path.join(ROOT,     'src')
+    SRC_CFG        : = os.path.join(SRC,      'cfg', main.NAME)
+    SRC_SYN        : = os.path.join(SRC,      'syn')
+    SRC_SIM        : = os.path.join(SRC,      'sim')
+    CFG_IP         : = os.path.join(SRC_CFG,  'ip')
+    CFG_SETTINGS   : = os.path.join(SRC_CFG,  'settings')
+                   
+    BUILD          : = os.path.join(ROOT, 'build')
+    BUILD_SYN      : = os.path.join(BUILD, main.NAME, 'syn')
+    BUILD_SIM      : = os.path.join(BUILD, main.NAME, 'sim')
+    IP_OOC         : = os.path.join(BUILD_SYN, 'ip_ooc')
+    IP_SCRIPT      : = os.path.join(IP_OOC, '_scripts')
+    IP_SIMSCRIPT   : = IP_SCRIPT
+    IP_SIMLIB      : = os.path.join(IP_OOC, 'ipsimlib')
                  
-    SRC          : = os.path.join(ROOT,     'src')
-    SRC_CFG      : = os.path.join(SRC,      'cfg', main.NAME)
-    SRC_SYN      : = os.path.join(SRC,      'syn')
-    SRC_SIM      : = os.path.join(SRC,      'sim')
-    CFG_IP       : = os.path.join(SRC_CFG,  'ip')
-    CFG_SETTINGS : = os.path.join(SRC_CFG,  'settings')
-
-    BUILD        : = os.path.join(ROOT, 'build')
-    BUILD_SYN    : = os.path.join(BUILD, main.NAME, 'syn')
-    BUILD_SIM    : = os.path.join(BUILD, main.NAME, 'sim')
-    IP_OOC       : = os.path.join(BUILD_SYN, 'ip_ooc')
-    IP_SCRIPT    : = os.path.join(IP_OOC, '_scripts')
-                 
-    OUTPUT       : = [BUILD_SYN, 
-                      BUILD_SIM, 
-                      IP_OOC, 
-                      IP_SCRIPT]
+    OUTPUT         : = [BUILD_SYN, 
+                        BUILD_SIM, 
+                        IP_OOC, 
+                        IP_SCRIPT,
+                        IP_SIMSCRIPT]
 

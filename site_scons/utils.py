@@ -28,7 +28,7 @@ def namegen(fullpath, ext):
 #-------------------------------------------------------------------------------
 def pexec(cmd, wdir = os.curdir):
     p = subprocess.Popen(cmd.split(),
-                         cwd = wdir,
+                         cwd = str(wdir),
                          universal_newlines = True,
                          stdin    = subprocess.PIPE,
                          stdout   = subprocess.PIPE,
@@ -58,6 +58,25 @@ def clog2(n: int) -> int:
 #-------------------------------------------------------------------------------
 def max_str_len(x):
     return len(max(x, key=len))
+#-------------------------------------------------------------------------------
+def search_file(fn, search_root=''):
+    fname = os.path.basename(fn)
+    fpath = os.path.join(search_root, fname)
+
+    if os.path.exists(fpath):
+        full_path = str.split(fpath)
+    else:
+        full_path = glob.glob( os.path.join(search_root, '**', fname) )
+
+    if not len(full_path):
+        print('E: config file not found:', fn)
+        sys.exit(1)
+
+    if len(full_path) > 1:
+        print('E: duplicate config files:', full_path)
+        sys.exit(1)
+        
+    return full_path[0]
 #-------------------------------------------------------------------------------
 class Dict2Class(object):
 
@@ -103,26 +122,8 @@ def eval_cfg_dict(cfg_dict: dict, imps=None) -> dict:
 #-------------------------------------------------------------------------------
 def read_config(fn: str, param_sect='parameters', search_root=''):
 
-    #print('read config:', fn)
-    
-    #print('read_config working path:', os.path.abspath(os.curdir))
-    
-    fname = os.path.basename(fn)
-    
-    if os.path.exists(fn):
-        full_path = str.split(fn)
-    else:
-        full_path = glob.glob( os.path.join(search_root, '**', fname) )
-    
-    if not len(full_path):
-        print('E: config file not found:', fn)
-        sys.exit(1)
-    
-    if len(full_path) > 1:
-        print('E: duplicate config files:', full_path)
-        sys.exit(1)
-    
-    with open( full_path[0] ) as f:
+    path = search_file(fn, search_root)
+    with open( path ) as f:
         cfg = yaml.safe_load(f)
 
     imps = {}
@@ -157,14 +158,23 @@ def read_ip_config(fn, param_sect, search_root=''):
     return ip_cfg
 
 #-------------------------------------------------------------------------------
+def read_ipsim_config(fn: str, search_root):
+
+    path = search_file(fn, search_root)
+    with open( path ) as f:
+        cfg = yaml.safe_load(f)
+        
+    return cfg['sources']
+    
+#-------------------------------------------------------------------------------
 def generate_title(text: str, comment: str) -> str:
     
-    hsep_len = 80 - len(comment)
+    hsep_len = 81 - len(comment)
     
-    empty_line   = comment + '*' + os.linesep
-    title_header = comment + '*'*hsep_len + os.linesep + empty_line
+    empty_line   = comment + os.linesep
+    title_header = comment + '-'*hsep_len + os.linesep + empty_line
 
-    title_body = comment + '*' +  (4 - len(comment))*' '
+    title_body = comment +  (4 - len(comment))*' '
     
     title_footer = empty_line + comment + '-'*hsep_len + os.linesep
     
@@ -180,10 +190,10 @@ def generate_title(text: str, comment: str) -> str:
 #-------------------------------------------------------------------------------
 def generate_footer(comment: str) -> str:
 
-    hsep_len = 80 - len(comment)
+    hsep_len = 81 - len(comment)
 
     empty_line = ' ' + os.linesep
-    separator  = comment + '*'*hsep_len + os.linesep
+    separator  = comment + '-'*hsep_len + os.linesep
 
     return  empty_line + separator
 #-------------------------------------------------------------------------------
@@ -195,6 +205,12 @@ def get_ip_name(node, suffix):
     ip_name = name.replace(suffix, '')
     
     return ip_name
+#-------------------------------------------------------------------------------
+def get_name(path):
+    return os.path.splitext( os.path.basename(path) )[0]
+#-------------------------------------------------------------------------------
+def drop_suffix(name):
+    return os.path.splitext(name)[0]
 #-------------------------------------------------------------------------------
 def create_dirs(dirs):
     for i in dirs:
