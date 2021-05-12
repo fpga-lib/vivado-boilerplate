@@ -13,17 +13,11 @@ dirs = import_config('dirpath.yml')
 ConfigName = cfg.NAME
 DEVICE     = cfg.DEVICE
 
-create_dirs(dirs.OUTPUT)
-
 #-------------------------------------------------------------------------------
 #
 #    Environment
 #
 Import('envx')
-
-#envx.Append(CFG  = cfg)
-#envx.Append(EXT  = ext)
-#envx.Append(DIRS = dirs)
 
 envx.Tool('vivado')
 envx.Tool('questa')
@@ -31,23 +25,11 @@ envx.Tool('questa')
 envx['DEVICE']               = cfg.DEVICE
 
 # path
-envx['CFG_PATH']             = os.path.abspath(os.curdir)  # current configuration path
-envx['SETTINGS_SEARCH_PATH'] = [dirs.CFG_SETTINGS]         # root dir for setting files (typically *.yml)
-envx['IPSIM_CONFIG_PATH']    = dirs.SRC_IPSIM              # path to dir with IP sim sources list files
+#envx['CFG_PATH']             = os.path.abspath(os.curdir)  # current configuration path
+envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # root dir for setting files (typically *.yml)
+envx['IPSIM_SRC_CFG_PATH']   = dirs.IPSIM_SRC_CFG          # path to dir with IP sim sources list files
 envx['IP_OOC_PATH']          = dirs.IP_OOC                 # path for out-of-context synthesized IP cores
-envx['IP_SCRIPT_PATH']       = dirs.IP_SCRIPT              # path for IP core processing script files
 envx['CFG_IP_PATH']          = dirs.CFG_IP                 # path for IP core configuration settings files
-
-# suffix
-#envx['IP_CORE_SUFFIX']       = ext.IP_CORE
-#envx['CONFIG_SUFFIX']        = ext.CONFIG
-#envx['IP_CONFIG_SUFFIX']     = ext.IP_CONFIG
-#envx['TOOL_SCRIPT_SUFFIX']   = ext.TOOL_SCRIPT
-#envx['SIM_SCRIPT_SUFFIX']    = ext.SIM_SCRIPT
-#envx['DCP_SUFFIX']           = ext.DESIGN_CHECKPOINT
-
-envx.Append(SYNFLAGS = ' -notrace')
-envx.Append(SYNFLAGS = ' -nojournal')
 
 #-------------------------------------------------------------------------------
 #
@@ -59,9 +41,12 @@ IP_Cores          = envx.CreateIps(IP_Create_Scripts)
 IP_OOC_Syn        = envx.SynIps(IP_Syn_Scripts, IP_Cores)
 
 IP_Simlib_Scripts = envx.IpSimLibScripts(IP_Cores)
-IP_Simlib         = envx.CompileSimlib(dirs.IP_SIMLIB, IP_Simlib_Scripts)
+IP_Simlib         = envx.CompileSimlib(IP_Simlib_Scripts)
                        
 #-------------------------------------------------------------------------------
+#
+#    Targets Aliases
+#
 envx.Alias('ipcs',     IP_Create_Scripts)
 envx.Alias('ipss',     IP_Syn_Scripts)
 envx.Alias('ip_cores', IP_Cores)
