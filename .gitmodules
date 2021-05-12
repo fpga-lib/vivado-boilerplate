@@ -1,3 +1,6 @@
 [submodule "lib/ipsim"]
 	path = lib/ipsim
 	url = https://github.com/fpga-lib/ipsim_xilinx.git
+[submodule "site_scons"]
+	path = site_scons
+	url = https://github.com/fpga-lib/site_scons.git
