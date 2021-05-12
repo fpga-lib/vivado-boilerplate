@@ -17,10 +17,4 @@ parameters:
     BUILD_SYN      : = os.path.join(BUILD, main.NAME, 'syn')
     BUILD_SIM      : = os.path.join(BUILD, main.NAME, 'sim')
     IP_OOC         : = os.path.join(BUILD_SYN, 'ip_ooc')
-#   IP_SCRIPT      : = os.path.join(IP_OOC, '_scripts')
-#   IP_SIMLIB      : = os.path.join(IP_OOC, 'ipsimlib')
-                 
-#   OUTPUT         : = [BUILD_SYN,
-#                       BUILD_SIM,
-#                       IP_OOC]
 
