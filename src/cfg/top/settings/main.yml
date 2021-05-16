@@ -1,5 +1,6 @@
 
 parameters:
-    NAME   : top
-    DEVICE : xc7a200tfbg676-2
+    TOP_NAME       : top
+    TESTBENCH_NAME : top_tb
+    DEVICE         : xc7a200tfbg676-2
 

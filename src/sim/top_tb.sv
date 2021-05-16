@@ -7,7 +7,7 @@
 //
 //-------------------------------------------------------------------------------
 
-`include "cfg_params_generated.svh"
+//`include "cfg_params_generated.svh"
 
 `timescale 1ns/1ps
 

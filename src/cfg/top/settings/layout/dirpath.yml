@@ -7,14 +7,14 @@ parameters:
     IPSIM_SRC_CFG  : = os.path.join(LIB,     'ipsim')
                    
     SRC            : = os.path.join(ROOT,     'src')
-    SRC_CFG        : = os.path.join(SRC,      'cfg', main.NAME)
+    SRC_CFG        : = os.path.abspath(os.curdir)
     SRC_SYN        : = os.path.join(SRC,      'syn')
     SRC_SIM        : = os.path.join(SRC,      'sim')
     CFG_IP         : = os.path.join(SRC_CFG,  'ip')
     SETTINGS       : = os.path.join(SRC_CFG,  'settings')
                    
     BUILD          : = os.path.join(ROOT, 'build')
-    BUILD_SYN      : = os.path.join(BUILD, main.NAME, 'syn')
-    BUILD_SIM      : = os.path.join(BUILD, main.NAME, 'sim')
+    BUILD_SYN      : = os.path.join(BUILD, os.path.basename(SRC_CFG), 'syn')
+    BUILD_SIM      : = os.path.join(BUILD, os.path.basename(SRC_CFG), 'sim')
     IP_OOC         : = os.path.join(BUILD_SYN, 'ip_ooc')
 
