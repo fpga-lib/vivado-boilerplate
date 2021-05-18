@@ -2,17 +2,22 @@
 import : clk dpc board
 
 parameters:
-    WIDTH          : 4                      
-    LENGTH         : 2000
-    LENGTH_WIDTH   : = clog2(LENGTH) 
-    LINK_WIDTH     : '4'
-    LINK_SPEED     : '5.0'
-    PCIE_MPS       : 512
-    SLON           : = WIDTH + LENGTH_WIDTH
-    CLK_PERIOD     : = 1e3/clk.MAIN_CLK_FREQ      # ns
-    TASK_COUNT     : = dpc.TASK_QUEUE_COUNT
-    TASK_POOL_SIZE : = dpc.TASK_DATA_LEN*SLON
-    TIME_SLOT      : = int(dpc.TIME_SLOT/WIDTH)
-    MAMONT         : = os.path.join('slon', 'mamont')
-    ADDR           : 0x1000
+    WIDTH             : 4                      
+    LENGTH            : 2000
+    LENGTH_WIDTH      : = clog2(LENGTH) 
+    LINK_WIDTH        : '4'
+    LINK_SPEED        : '5.0'
+    PCIE_MPS          : 512
+    SLON              : = WIDTH + LENGTH_WIDTH
+    CLK_PERIOD        : = 1e3/clk.MAIN_CLK_FREQ      # ns
+    TASK_COUNT        : = dpc.TASK_QUEUE_COUNT
+    TASK_POOL_SIZE    : = dpc.TASK_DATA_LEN*SLON
+    TIME_SLOT         : = int(dpc.TIME_SLOT/WIDTH)
+    MAMONT            : = os.path.join('slon', 'mamont')
+    ADDR              : 0x1000
+    CLK_FREQ          : 100000000
+    CLK_PRDIOD        : = str(1e9/CLK_FREQ)   + 'ns'
+    CLK_HALF_PERIOD   : = str(1e9/CLK_FREQ/2) + 'ns'
+    DIFF_REFCLK       : ' '
+
 

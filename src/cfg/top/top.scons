@@ -27,11 +27,15 @@ envx['DEVICE']               = cfg.DEVICE
 
 
 # path
-envx['CFG_PATH']             = os.path.abspath(os.curdir)  # current configuration path
+#envx['CFG_PATH']             = os.path.abspath(os.curdir)  # current configuration path
 envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # root dir for setting files (typically *.yml)
 envx['IPSIM_SRC_CFG_PATH']   = dirs.IPSIM_SRC_CFG          # path to dir with IP sim sources list files
 envx['IP_OOC_PATH']          = dirs.IP_OOC                 # path for out-of-context synthesized IP cores
 envx['CFG_IP_PATH']          = dirs.CFG_IP                 # path for IP core configuration settings files
+envx['SIM_INC_PATH']         = dirs.SRC
+
+envx.Append(VLOG_FLAGS = ' -O5 -timescale=1ns/1ps')
+envx.Append(VOPT_FLAGS = ' -O5 -L wlib -L unifast_ver -L unisims_ver -L unimacro_ver -L secureip -L xpmlib -L ipsimlib')
 
 src     = read_sources('src_syn.yml')
 src_sim = read_sources('src_sim.yml')
@@ -53,6 +57,8 @@ IP_SimLib         = envx.CompileSimLib(IP_SimLib_Scripts)
                    
 WLib              = envx.CompileWorkLib(src + src_sim)
     
+CfgParamsHeader   = envx.CreateCfgParamsHeader(os.path.join(dirs.SRC, 'cfg_params.svh'), 'settings.yml main.yml')
+
 #-------------------------------------------------------------------------------
 #
 #    Targets Aliases
@@ -66,6 +72,8 @@ envx.Alias('ip_sls', IP_SimLib_Scripts)
 envx.Alias('simlib', IP_SimLib)
 
 envx.Alias('wlib', WLib)
+
+envx.Alias('cparam', CfgParamsHeader)
 
 envx.AlwaysBuild(WLib)
 
