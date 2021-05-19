@@ -70,7 +70,7 @@ envx.Alias('simlib',   IP_SimLib)
 envx.Alias('cparam',   CfgParamsHeader)
 envx.Alias('wlib',     WLib)
 
-Depends(WLib, IP_SimLib)
+Depends(WLib, [IP_SimLib, CfgParamsHeader])
 envx.AlwaysBuild(WLib)
 
 Default(WLib)
