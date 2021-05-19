@@ -2,5 +2,6 @@
 .sconsign.dblite
 __pycache__
 build
+cfg_params.svh
 *.vpwhistu
 *.vtg

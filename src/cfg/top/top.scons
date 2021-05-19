@@ -10,8 +10,7 @@ cfg  = import_config('main.yml')
 ext  = import_config('filetype.yml')
 dirs = import_config('dirpath.yml')
 
-ConfigName = cfg.NAME
-DEVICE     = cfg.DEVICE
+DEVICE = cfg.DEVICE
 
 #-------------------------------------------------------------------------------
 #
@@ -22,14 +21,24 @@ Import('envx')
 envx.Tool('vivado')
 envx.Tool('questa')
 
+envx['TOP_NAME']             = cfg.TOP_NAME
+envx['TESTBENCH_NAME']       = cfg.TESTBENCH_NAME
 envx['DEVICE']               = cfg.DEVICE
+
 
 # path
 #envx['CFG_PATH']             = os.path.abspath(os.curdir)  # current configuration path
 envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # root dir for setting files (typically *.yml)
-envx['IPSIM_SRC_CFG_PATH']   = dirs.IPSIM_SRC_CFG          # path to dir with IP sim sources list files
+envx['IPSIM_SRC_CFG_PATH']   = dirs.IPSIM_SRC_CFG          # path to dir with IP sim source list files
 envx['IP_OOC_PATH']          = dirs.IP_OOC                 # path for out-of-context synthesized IP cores
 envx['CFG_IP_PATH']          = dirs.CFG_IP                 # path for IP core configuration settings files
+envx['SIM_INC_PATH']         = dirs.SRC
+
+envx.Append(VLOG_FLAGS = ' -O5 -timescale=1ns/1ps')
+envx.Append(VOPT_FLAGS = ' -O5 -L wlib -L unifast_ver -L unisims_ver -L unimacro_ver -L secureip -L xpmlib -L ipsimlib')
+
+src     = read_sources('src_syn.yml')
+src_sim = read_sources('src_sim.yml')
 
 #-------------------------------------------------------------------------------
 #
@@ -40,9 +49,13 @@ IP_Syn_Scripts    = envx.IpSynScripts(ip)
 IP_Cores          = envx.CreateIps(IP_Create_Scripts)
 IP_OOC_Syn        = envx.SynIps(IP_Syn_Scripts, IP_Cores)
 
-IP_Simlib_Scripts = envx.IpSimLibScripts(IP_Cores)
-IP_Simlib         = envx.CompileSimlib(IP_Simlib_Scripts)
-                       
+IP_SimLib_Scripts = envx.IpSimLibScripts(IP_Cores)
+IP_SimLib         = envx.CompileSimLib(IP_SimLib_Scripts)
+                   
+WLib              = envx.CompileWorkLib(src + src_sim)
+    
+CfgParamsHeader   = envx.CreateCfgParamsHeader(os.path.join(dirs.SRC, 'cfg_params.svh'), 'settings.yml main.yml')
+
 #-------------------------------------------------------------------------------
 #
 #    Targets Aliases
@@ -52,10 +65,15 @@ envx.Alias('ipss',     IP_Syn_Scripts)
 envx.Alias('ip_cores', IP_Cores)
 envx.Alias('ip_ooc',   IP_OOC_Syn)
 
-envx.Alias('ip_sls', IP_Simlib_Scripts)
-envx.Alias('simlib', IP_Simlib)
+envx.Alias('ip_sls',   IP_SimLib_Scripts)
+envx.Alias('simlib',   IP_SimLib)
+envx.Alias('cparam',   CfgParamsHeader)
+envx.Alias('wlib',     WLib)
 
-Default(IP_Simlib)
+Depends(WLib, [IP_SimLib, CfgParamsHeader])
+envx.AlwaysBuild(WLib)
+
+Default(WLib)
 
 #-------------------------------------------------------------------------------
 #
@@ -68,8 +86,10 @@ Help("""
         ipss     : IP Synthesize Scripts
         ip_cores : Create IPs
         ip_ooc   : Create IP design checkpoints by sythisizing of 'xci's
-        ip_sls   : IP Simlib Scripts
-        simlib   : IP Simlib (default)
+        ip_sls   : IP SimLib Scripts
+        simlib   : IP SimLib (default)
+        cparam   : generate parameter headers
+        wlib     : compile work library (default)
 ********************************************************************************     
 """)
 #-------------------------------------------------------------------------------
