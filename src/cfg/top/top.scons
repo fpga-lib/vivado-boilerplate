@@ -40,9 +40,6 @@ envx.Append(VOPT_FLAGS = ' -O5 -L wlib -L unifast_ver -L unisims_ver -L unimacro
 src     = read_sources('src_syn.yml')
 src_sim = read_sources('src_sim.yml')
 
-#print(src, src_sim)
-
-
 #-------------------------------------------------------------------------------
 #
 #    Targets
@@ -68,16 +65,14 @@ envx.Alias('ipss',     IP_Syn_Scripts)
 envx.Alias('ip_cores', IP_Cores)
 envx.Alias('ip_ooc',   IP_OOC_Syn)
 
-envx.Alias('ip_sls', IP_SimLib_Scripts)
-envx.Alias('simlib', IP_SimLib)
-
-envx.Alias('wlib', WLib)
-
-envx.Alias('cparam', CfgParamsHeader)
+envx.Alias('ip_sls',   IP_SimLib_Scripts)
+envx.Alias('simlib',   IP_SimLib)
+envx.Alias('cparam',   CfgParamsHeader)
+envx.Alias('wlib',     WLib)
 
 envx.AlwaysBuild(WLib)
 
-Default(IP_SimLib)
+Default(WLib)
 
 #-------------------------------------------------------------------------------
 #
@@ -92,6 +87,8 @@ Help("""
         ip_ooc   : Create IP design checkpoints by sythisizing of 'xci's
         ip_sls   : IP SimLib Scripts
         simlib   : IP SimLib (default)
+        cparam   : generate parameter headers
+        wlib     : compile work library (default)
 ********************************************************************************     
 """)
 #-------------------------------------------------------------------------------
