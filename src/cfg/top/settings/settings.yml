@@ -15,7 +15,7 @@ parameters:
     TIME_SLOT         : = int(dpc.TIME_SLOT/WIDTH)
     MAMONT            : = os.path.join('slon', 'mamont')
     ADDR              : 0x1000
-    CLK_FREQ          : 100000000
+    CLK_FREQ          : = board.OSC_FREQ*1e6 # 100000000
     CLK_PRDIOD        : = str(1e9/CLK_FREQ)   + 'ns'
     CLK_HALF_PERIOD   : = str(1e9/CLK_FREQ/2) + 'ns'
     DIFF_REFCLK       : ' '
