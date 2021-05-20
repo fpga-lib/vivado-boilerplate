@@ -40,6 +40,7 @@ print('variant:', variant)
 #    Environment
 #
 envx = Environment() #( tools = {} )
+envx['ENV']['PATH'] = os.environ['PATH']
 
 
 #-------------------------------------------------------------------------------
