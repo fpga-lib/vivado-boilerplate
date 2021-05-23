@@ -1,13 +1,12 @@
 import os
 
-ip       = ['pll', 'pcie']
 
 #-------------------------------------------------------------------------------
 #
 #    Configuration
 #
 cfg  = import_config('main.yml')
-ext  = import_config('filetype.yml')
+#ext  = import_config('filetype.yml')
 dirs = import_config('dirpath.yml')
 
 DEVICE = cfg.DEVICE
@@ -37,8 +36,14 @@ envx['SIM_INC_PATH']         = dirs.SRC
 envx.Append(VLOG_FLAGS = ' -O5 -timescale=1ns/1ps')
 envx.Append(VOPT_FLAGS = ' -O5 -L wlib -L unifast_ver -L unisims_ver -L unimacro_ver -L secureip -L xpmlib -L ipsimlib')
 
+#-------------------------------------------------------------------------------
+#
+#    Sources
+#
 src     = read_sources('src_syn.yml')
 src_sim = read_sources('src_sim.yml')
+
+ip      = read_ips('ip.yml')
 
 #-------------------------------------------------------------------------------
 #
