@@ -13,10 +13,7 @@ import os
 #    Configuration
 #
 cfg  = import_config('main.yml')
-#ext  = import_config('filetype.yml')
 dirs = import_config('dirpath.yml')
-
-DEVICE = cfg.DEVICE
 
 #-------------------------------------------------------------------------------
 #
