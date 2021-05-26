@@ -1,4 +1,4 @@
 
-ip:
-    - pll
-    - pcie
+sources:
+    - src/cfg/top/ip/pll.yml
+    - src/cfg/top/ip/pcie.yml

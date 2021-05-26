@@ -10,7 +10,6 @@ parameters:
     SRC_CFG        : = os.path.abspath(os.curdir)
     SRC_SYN        : = os.path.join(SRC,      'syn')
     SRC_SIM        : = os.path.join(SRC,      'sim')
-    CFG_IP         : = os.path.join(SRC_CFG,  'ip')
     SETTINGS       : = os.path.join(SRC_CFG,  'settings')
                    
 

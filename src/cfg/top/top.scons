@@ -29,7 +29,6 @@ envx['DEVICE']              = cfg.DEVICE
 # path
 envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # root dir for setting files (typically *.yml)
 envx['IPSIM_SRC_CFG_PATH']   = dirs.IPSIM_SRC_CFG          # path to dir with IP sim source list files
-envx['CFG_IP_PATH']          = dirs.CFG_IP                 # path for IP core configuration settings files
 envx['INC_PATH']             = dirs.SRC
 envx['SIM_INC_PATH']         = envx['INC_PATH']
 
@@ -42,8 +41,7 @@ envx.Append(VOPT_FLAGS = ' -O5 -L wlib -L unifast_ver -L unisims_ver -L unimacro
 #
 src     = read_sources('src_syn.yml')
 src_sim = read_sources('src_sim.yml')
-
-ip      = read_ips('ip.yml')
+ip      = read_sources('ip.yml')
 
 #-------------------------------------------------------------------------------
 #
