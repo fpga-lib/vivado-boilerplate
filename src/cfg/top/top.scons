@@ -20,9 +20,10 @@ Import('envx')
 envx.Tool('vivado')
 envx.Tool('questa')
 
-envx['TOP_NAME']       = cfg.TOP_NAME
-envx['TESTBENCH_NAME'] = cfg.TESTBENCH_NAME
-envx['DEVICE']         = cfg.DEVICE
+envx['VIVADO_PROJECT_NAME'] = cfg.PROJECT_NAME
+envx['TOP_NAME']            = cfg.TOP_NAME
+envx['TESTBENCH_NAME']      = cfg.TESTBENCH_NAME
+envx['DEVICE']              = cfg.DEVICE
 
 
 # path
