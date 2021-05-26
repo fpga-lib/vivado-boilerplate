@@ -90,6 +90,8 @@ envx.Alias('qs_gui',   LaunchQuestaGui)
 envx.Alias('xpr',      VivadoProject)
 
 
+all = [WLib, VivadoProject]
+envx.Alias('all', all)
 
 
 #-------------------------------------------------------------------------------
