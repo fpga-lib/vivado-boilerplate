@@ -13,8 +13,4 @@ parameters:
     CFG_IP         : = os.path.join(SRC_CFG,  'ip')
     SETTINGS       : = os.path.join(SRC_CFG,  'settings')
                    
-    BUILD          : = os.path.join(ROOT, 'build')
-    BUILD_SYN      : = os.path.join(BUILD, os.path.basename(SRC_CFG), 'syn')
-    BUILD_SIM      : = os.path.join(BUILD, os.path.basename(SRC_CFG), 'sim')
-    IP_OOC         : = os.path.join(BUILD_SYN, 'ip_ooc')
 
