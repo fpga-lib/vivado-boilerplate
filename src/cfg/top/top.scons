@@ -64,6 +64,8 @@ CfgParamsHeader   = envx.CreateCfgParamsHeader(os.path.join(dirs.SRC, 'cfg_param
 
 LaunchQuestaGui   = envx.LaunchQuestaGui()
 
+VivadoProject     = envx.CreateVivadoProject('src_syn.yml xdc.yml prj_props.tcl', IP_Cores)
+
 Depends(WLib, [IP_SimLib, CfgParamsHeader])
 
 envx.AlwaysBuild(WLib)
@@ -85,6 +87,8 @@ envx.Alias('simlib',   IP_SimLib)
 envx.Alias('cparam',   CfgParamsHeader)
 envx.Alias('wlib',     WLib)
 envx.Alias('qs_gui',   LaunchQuestaGui)
+envx.Alias('xpr',      VivadoProject)
+
 
 
 
@@ -104,6 +108,7 @@ Help("""
         cparam   : generate parameter headers
         wlib     : compile work library (default)
         qs_gui   : launch Questa GUI in destination dir with tool script loaded
+        xpr      : create Vivado Project
 ********************************************************************************     
 """)
 #-------------------------------------------------------------------------------
