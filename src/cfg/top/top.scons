@@ -64,6 +64,13 @@ CfgParamsHeader   = envx.CreateCfgParamsHeader(os.path.join(dirs.SRC, 'cfg_param
 
 LaunchQuestaGui   = envx.LaunchQuestaGui()
 
+Depends(WLib, [IP_SimLib, CfgParamsHeader])
+
+envx.AlwaysBuild(WLib)
+envx.AlwaysBuild(LaunchQuestaGui)
+
+Default(WLib)
+
 #-------------------------------------------------------------------------------
 #
 #    Targets Aliases
@@ -79,11 +86,7 @@ envx.Alias('cparam',   CfgParamsHeader)
 envx.Alias('wlib',     WLib)
 envx.Alias('qs_gui',   LaunchQuestaGui)
 
-Depends(WLib, [IP_SimLib, CfgParamsHeader])
-envx.AlwaysBuild(WLib)
-envx.AlwaysBuild(LaunchQuestaGui)
 
-Default(WLib)
 
 #-------------------------------------------------------------------------------
 #
