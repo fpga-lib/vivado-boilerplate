@@ -1,4 +1,4 @@
-[submodule "lib/ipsim"]
+[submodule "lib/ip_simlib_list"]
 	path = lib/ip_simsrc_list
 	url = https://github.com/fpga-lib/ip_simsrc_list_xilinx.git
 [submodule "site_scons"]
