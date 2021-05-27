@@ -4,7 +4,7 @@ import  : main
 parameters:
     ROOT           : = os.path.abspath('../../..')
     LIB            : = os.path.join(ROOT,    'lib')
-    IPSIM_SRC_CFG  : = os.path.join(LIB,     'ipsim')
+    IPSIM_SRC_CFG  : = os.path.join(LIB,     'ip_simsrc_list')
                    
     SRC            : = os.path.join(ROOT,     'src')
     SRC_CFG        : = os.path.abspath(os.curdir)
