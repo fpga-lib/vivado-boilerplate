@@ -22,7 +22,7 @@ Xilinx Vivado Non-Project Flow
      
     Usage:
     ~~~~~  
-    scons [cfg=<cfg-name>] [targets]
+    scons [variant=<name>] [targets]
 """
 )
 
