@@ -13,19 +13,19 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveAll"
                 ClearProcessBuffer="1"
-                RunFromDir="%rw/cfg/xilinx_7A50T"
+                RunFromDir="%rw"
                 MenuCaption="Compile Simulator Project">
-                <Exec CmdLine="make qs_vlog"/>
+                <Exec CmdLine="etime.sh scons -s wlib"/>
             </Target>
             <Target
                 Name="Build"
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveAll"
-                RunFromDir="%rw/cfg/xilinx_7A50T"
+                RunFromDir="%rw"
                 ClearProcessBuffer="1"
                 MenuCaption="&amp;Build Vivado Project"
                 Verbose="1">
-                <Exec CmdLine="make"/>
+                <Exec CmdLine="etime.sh scons -s xprbld"/>
             </Target>
             <Target
                 Name="Rebuild"
@@ -42,17 +42,35 @@
                 MenuCaption="&amp;Debug"
                 SaveOption="SaveNone"
                 RunInXterm="1"
-                RunFromDir="%rw/cfg/xilinx_7A50T">
-                <Exec CmdLine="make qs_gui"/>
+                RunFromDir="%rw">
+                <Exec CmdLine="scons -s qs_gui"/>
             </Target>
             <Target
-                Name="Execute"
-                MenuCaption="Program Device"
-                SaveOption="SaveAll"
-                RunFromDir="%rw/cfg/xilinx_7A50T"
+                Name="Sim Run"
+                MenuCaption="Sim &amp;Run"
+                RunFromDir="%rw"
                 CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveAll"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make dev_pgm"/>
+                <Exec CmdLine="etime.sh scons -s qs_run"/>
+            </Target>
+            <Target
+                Name="Create Vivado Project"
+                MenuCaption="Create &amp;Vivado Project"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s xpr"/>
+            </Target>
+            <Target
+                Name="Open Vivado Project"
+                MenuCaption="&amp;Open Vivado Project"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s xpropen"/>
             </Target>
         </Menu>
     </Config>
@@ -66,9 +84,9 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveAll"
                 ClearProcessBuffer="1"
-                RunFromDir="%rw/cfg/xilinx_7A35T"
+                RunFromDir="%rw"
                 MenuCaption="Compile Simulator Project">
-                <Exec CmdLine="make qs_vlog"/>
+                <Exec CmdLine="etime.sh scons -s wlib"/>
             </Target>
             <Target
                 Name="Build"
@@ -77,8 +95,8 @@
                 ClearProcessBuffer="1"
                 MenuCaption="&amp;Build Vivado Project"
                 Verbose="1"
-                RunFromDir="%rw/cfg/xilinx_7A35T">
-                <Exec CmdLine="make"/>
+                RunFromDir="%rw">
+                <Exec CmdLine="etime.sh scons -s xprbld"/>
             </Target>
             <Target
                 Name="Rebuild"
@@ -95,17 +113,35 @@
                 MenuCaption="&amp;Debug"
                 SaveOption="SaveNone"
                 RunInXterm="1"
-                RunFromDir="%rw/cfg/xilinx_7A35T">
-                <Exec CmdLine="make qs_gui"/>
+                RunFromDir="%rw">
+                <Exec CmdLine="scons -s qs_gui"/>
             </Target>
             <Target
-                Name="Execute"
-                MenuCaption="Program Device"
-                SaveOption="SaveAll"
+                Name="Sim Run"
+                MenuCaption="Sim &amp;Run"
+                RunFromDir="%rw"
                 CaptureOutputWith="ProcessBuffer"
-                ClearProcessBuffer="1"
-                RunFromDir="%rw/cfg/xilinx_7A35T">
-                <Exec CmdLine="make dev_pgm"/>
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s qs_run"/>
+            </Target>
+            <Target
+                Name="Create Vivado Project"
+                MenuCaption="Create &amp;Vivado Project"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s xpr"/>
+            </Target>
+            <Target
+                Name="Open Vivado Project"
+                MenuCaption="&amp;Open Vivado Project"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s xpropen"/>
             </Target>
         </Menu>
     </Config>
@@ -119,9 +155,9 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveAll"
                 ClearProcessBuffer="1"
-                RunFromDir="%rw/cfg/xilinx_AC701"
+                RunFromDir="%rw"
                 MenuCaption="Compile Simulator Project">
-                <Exec CmdLine="make qs_vlog"/>
+                <Exec CmdLine="etime.sh scons -s wlib"/>
             </Target>
             <Target
                 Name="Build"
@@ -130,8 +166,8 @@
                 ClearProcessBuffer="1"
                 MenuCaption="&amp;Build Vivado Project"
                 Verbose="1"
-                RunFromDir="%rw/cfg/xilinx_AC701">
-                <Exec CmdLine="make"/>
+                RunFromDir="%rw">
+                <Exec CmdLine="etime.sh scons -s xprbld"/>
             </Target>
             <Target
                 Name="Rebuild"
@@ -148,23 +184,39 @@
                 MenuCaption="&amp;Debug"
                 SaveOption="SaveNone"
                 RunInXterm="1"
-                RunFromDir="%rw/cfg/xilinx_AC701">
-                <Exec CmdLine="make qs_gui"/>
+                RunFromDir="%rw">
+                <Exec CmdLine="scons -s qs_gui"/>
             </Target>
             <Target
-                Name="Execute"
-                MenuCaption="Program Device"
-                SaveOption="SaveAll"
+                Name="Sim Run"
+                MenuCaption="Sim &amp;Run"
+                RunFromDir="%rw"
                 CaptureOutputWith="ProcessBuffer"
-                ClearProcessBuffer="1"
-                RunFromDir="%rw/cfg/xilinx_AC701">
-                <Exec CmdLine="make dev_pgm"/>
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s qs_run"/>
+            </Target>
+            <Target
+                Name="Create Vivado Project"
+                MenuCaption="Create &amp;Vivado Project"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s xpr"/>
+            </Target>
+            <Target
+                Name="Open Vivado Project"
+                MenuCaption="&amp;Open Vivado Project"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveAll"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="etime.sh scons -s xpropen"/>
             </Target>
         </Menu>
     </Config>
     <CustomFolders></CustomFolders>
-    <List Name="RTE">
-    </List>
     <Files AutoFolders="DirectoryView">
         <Folder Name="lib">
             <F
@@ -186,4 +238,6 @@
             Excludes=".git"
             L="1"/>
     </Files>
+    <List Name="RTE">
+    </List>
 </Project>
