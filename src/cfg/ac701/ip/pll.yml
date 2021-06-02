@@ -1,12 +1,12 @@
 
-import : clk settings
+import : clk
 
 type  : clk_wiz
 
 config:
     PRIMITIVE                  : PLL
-    PRIM_IN_FREQ               : = clk.REF_CLK_FREQ
-    CLKOUT1_REQUESTED_OUT_FREQ : = clk.MAIN_CLK_FREQ
+    PRIM_IN_FREQ               : = clk.REF_CLK
+    CLKOUT1_REQUESTED_OUT_FREQ : = clk.MAIN_CLK
     USE_LOCKED                 : true
     USE_RESET                  : false
     USE_SAFE_CLOCK_STARTUP     : true

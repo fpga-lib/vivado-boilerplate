@@ -2,8 +2,5 @@
 import : clk
 
 parameters:
-    TASK_QUEUE_COUNT : 16                   
-    TASK_DATA_LEN    : 16384  # bytes
-    TIME_SLOT        : = 1e3/clk.MAIN_CLK_FREQ*TASK_QUEUE_COUNT
-
-
+    VERBOSE  : 1
+    BASE_CLK : = clk.MAIN_CLK

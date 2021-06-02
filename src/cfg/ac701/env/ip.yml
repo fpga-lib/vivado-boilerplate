@@ -1,4 +1,3 @@
 
 sources:
-    - src/cfg/top/ip/pll.yml
-    - src/cfg/top/ip/pcie.yml
+    - src/cfg/ac701/ip/pll.yml

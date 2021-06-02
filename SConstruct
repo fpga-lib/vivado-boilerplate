@@ -13,12 +13,11 @@ Help("""
 ********************************************************************************     
 Xilinx Vivado Non-Project Flow
     
-    Available configurations:
+    Available variants:
     ~~~~~~~~~~~~~~~~~~~~~~~~ 
-        top (default)
-        slon
-        ac701
-        all
+        ac701 (default)
+        7a35t
+        7a50t
      
     Usage:
     ~~~~~  
@@ -48,7 +47,7 @@ envx['ENV']['PATH'] = os.environ['PATH']
 #    Project configurations
 #
 
-SConscript('src/cfg/top/top.scons', exports='envx')
+SConscript('src/cfg/ac701/ac701.scons', exports='envx')
 #-------------------------------------------------------------------------------
 
 if 'dump' in ARGUMENTS:
