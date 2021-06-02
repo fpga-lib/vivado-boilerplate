@@ -42,6 +42,7 @@ end
 
 initial begin
     #10us
+    $display("\n%c[1;32m ******************** SIMULATION RUN FINISHED SUCCESSFULLY ********************%c[0m", 27, 27);
     $stop(2);   
 end 
 

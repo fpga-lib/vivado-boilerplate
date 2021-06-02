@@ -22,7 +22,7 @@ module automatic top
     input  logic              ref_clk,
 `endif
 
-    output logic [`WIDTH-1:0] out
+    output logic [`WIDTH-1:0] out = 0
 );
 
 //------------------------------------------------------------------------------
@@ -44,6 +44,7 @@ logic ref_clk;
 `endif
 
 logic clk;
+logic pll_locked;
 
 //------------------------------------------------------------------------------
 //
@@ -55,7 +56,9 @@ logic clk;
 //    Logic
 //
 always_ff @(posedge clk) begin
-    out <= out + 1;
+    if(pll_locked) begin
+        out <= out + 1;
+    end
 end
 
 //------------------------------------------------------------------------------

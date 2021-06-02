@@ -1,8 +1,0 @@
-
-import : board
-
-parameters:
-    REF_CLK_FREQ  : = board.OSC_FREQ  # MHz               
-    MAIN_CLK_FREQ : 125               # MHz               
-
-
