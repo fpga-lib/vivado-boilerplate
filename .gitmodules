@@ -1,6 +1,3 @@
-[submodule "lib/ip_simlib_list"]
-	path = lib/ip_simsrc_list
-	url = https://github.com/fpga-lib/ip_simsrc_list_xilinx.git
 [submodule "site_scons"]
 	path = site_scons
 	url = https://github.com/fpga-lib/site_scons.git
