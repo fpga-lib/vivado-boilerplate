@@ -85,12 +85,8 @@ OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 #   explicit dependencies and directives
 Depends(WLib,              [IP_SimLib, CfgParamsHeader])
 Depends(LaunchQuestaRun,   WLib)
-
-if 'xprbld' or 'xpropen' in COMMAND_LINE_TARGETS:
-    Depends(VivadoProject, [CfgParamsHeader, CfgParamsTcl, IP_OOC_Syn])
-else:
-    Depends(VivadoProject, [CfgParamsHeader, CfgParamsTcl])
-
+Depends(VivadoProject, [CfgParamsHeader, CfgParamsTcl])
+Requires(VivadoProject, IP_OOC_Syn)
 Depends(OpenVivadoProject, [IP_OOC_Syn])
 
 envx.AlwaysBuild(WLib)
