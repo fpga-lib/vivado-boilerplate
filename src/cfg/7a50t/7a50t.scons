@@ -85,13 +85,19 @@ OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 #   explicit dependencies and directives
 Depends(WLib,              [IP_SimLib, CfgParamsHeader])
 Depends(LaunchQuestaRun,   WLib)
-Depends(VivadoProject,     [CfgParamsHeader, CfgParamsTcl])
+
+if 'xprbld' or 'xpropen' in COMMAND_LINE_TARGETS:
+    Depends(VivadoProject, [CfgParamsHeader, CfgParamsTcl, IP_OOC_Syn])
+else:
+    Depends(VivadoProject, [CfgParamsHeader, CfgParamsTcl])
+
 Depends(OpenVivadoProject, [IP_OOC_Syn])
 
 envx.AlwaysBuild(WLib)
 envx.AlwaysBuild(LaunchQuestaGui)
 
 Default(WLib)
+all = [WLib, BuildVivadoProject]
 
 #-------------------------------------------------------------------------------
 #
@@ -112,12 +118,7 @@ envx.Alias('qs_run',     LaunchQuestaRun)
 envx.Alias('xpr',        VivadoProject)
 envx.Alias('xprbld',     BuildVivadoProject)
 envx.Alias('xpropen',    OpenVivadoProject)
-
-
-
-all = [WLib, BuildVivadoProject]
-envx.Alias('all', all)
-
+envx.Alias('all',        all)
 
 #-------------------------------------------------------------------------------
 #
