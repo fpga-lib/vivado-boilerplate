@@ -15,7 +15,7 @@
                 ClearProcessBuffer="1"
                 RunFromDir="%rw"
                 MenuCaption="Compile Simulator Project">
-                <Exec CmdLine="etime.sh scons -s wlib"/>
+                <Exec CmdLine="etime.sh scons -s variant=7a50t wlib"/>
             </Target>
             <Target
                 Name="Build"
@@ -25,7 +25,7 @@
                 ClearProcessBuffer="1"
                 MenuCaption="&amp;Build Vivado Project"
                 Verbose="1">
-                <Exec CmdLine="etime.sh scons -s xprbld"/>
+                <Exec CmdLine="etime.sh scons -s variant=7a50t xprbld"/>
             </Target>
             <Target
                 Name="Rebuild"
@@ -52,7 +52,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveAll"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="etime.sh scons -s qs_run"/>
+                <Exec CmdLine="etime.sh scons -s variant=7a50t qs_run"/>
             </Target>
             <Target
                 Name="Create Vivado Project"
@@ -61,7 +61,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveAll"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="etime.sh scons -s xpr"/>
+                <Exec CmdLine="etime.sh scons -s variant=7a50t xpr"/>
             </Target>
             <Target
                 Name="Open Vivado Project"
@@ -70,7 +70,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveAll"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="etime.sh scons -s xpropen"/>
+                <Exec CmdLine="etime.sh scons -s variant=7a50t xpropen"/>
             </Target>
         </Menu>
     </Config>
