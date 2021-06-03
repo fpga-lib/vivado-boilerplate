@@ -9,12 +9,10 @@ sys.dont_write_bytecode = True
 #
 #    Help info
 #
-Help("""
+help_info ="""
 ********************************************************************************     
-Xilinx Vivado Non-Project Flow
-    
     Available variants:
-    ~~~~~~~~~~~~~~~~~~~~~~~~ 
+    ~~~~~~~~~~~~~~~~~~~
         ac701 (default)
         7a35t
         7a50t
@@ -23,14 +21,15 @@ Xilinx Vivado Non-Project Flow
     ~~~~~  
     scons [variant=<name>] [targets]
 """
-)
+
+Help(help_info)
 
 #-------------------------------------------------------------------------------
 #
 #    General Settings
 #
 
-variant = ARGUMENTS.get('variant', 'top')
+variant = ARGUMENTS.get('variant', 'ac701')
 
 print('variant:', variant)
 
@@ -47,7 +46,13 @@ envx['ENV']['PATH'] = os.environ['PATH']
 #    Project configurations
 #
 
-SConscript('src/cfg/ac701/ac701.scons', exports='envx')
+variant_path = os.path.join('src', 'cfg', variant, variant + '.scons')
+if not os.path.exists(variant_path):
+    print('\nError: unsupported variant: ', variant)
+    print(help_info)
+    sys.exit(-3)
+
+SConscript(variant_path, exports='envx')
 #-------------------------------------------------------------------------------
 
 if 'dump' in ARGUMENTS:
