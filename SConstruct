@@ -29,9 +29,6 @@ Help(help_info)
 #    General Settings
 #
 
-variant = ARGUMENTS.get('variant', 'ac701')
-
-print('variant:', variant)
 
 #-------------------------------------------------------------------------------
 #
@@ -40,19 +37,24 @@ print('variant:', variant)
 envx = Environment() #( tools = {} )
 envx['ENV']['PATH'] = os.environ['PATH']
 
-
 #-------------------------------------------------------------------------------
 #
-#    Project configurations
+#    Variant management
 #
+variant = ARGUMENTS.get('variant', 'ac701')
+
+print_info('*'*80)
+print_info(' '*27 + 'build variant: ' + variant)
+print_info('*'*80 + '\n')
 
 variant_path = os.path.join('src', 'cfg', variant, variant + '.scons')
 if not os.path.exists(variant_path):
-    print('\nError: unsupported variant: ', variant)
+    print_error('\nError: unsupported variant: ' + variant)
     print(help_info)
     sys.exit(-3)
 
 SConscript(variant_path, exports='envx')
+
 #-------------------------------------------------------------------------------
 
 if 'dump' in ARGUMENTS:
@@ -61,7 +63,6 @@ if 'dump' in ARGUMENTS:
         print( envx.Dump() )
     else:
         print( envx.Dump(key = env_key) )
-
 
 #-------------------------------------------------------------------------------
 
