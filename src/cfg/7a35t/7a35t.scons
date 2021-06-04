@@ -29,7 +29,6 @@ envx['TOP_NAME']            = cfg.TOP_NAME
 envx['TESTBENCH_NAME']      = cfg.TESTBENCH_NAME
 envx['DEVICE']              = cfg.DEVICE
 
-
 # path
 envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # root dir for setting files (typically *.yml)
 envx['INC_PATH']             = envx['BUILD_SRC_PATH']
