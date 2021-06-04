@@ -1,0 +1,3 @@
+[submodule "site_scons"]
+	path = site_scons
+	url = https://github.com/fpga-lib/site_scons.git

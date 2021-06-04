@@ -1,0 +1,8 @@
+
+parameters:
+    VARIANT_NAME   : ac701
+    PROJECT_NAME   : = VARIANT_NAME
+    TOP_NAME       : top
+    TESTBENCH_NAME : top_tb
+    DEVICE         : xc7a200tfbg676-2
+

@@ -1,0 +1,8 @@
+
+parameters:
+    VARIANT_NAME   : 7a35t
+    PROJECT_NAME   : = VARIANT_NAME
+    TOP_NAME       : top
+    TESTBENCH_NAME : top_tb
+    DEVICE         : xc7a35ticsg324-1L
+

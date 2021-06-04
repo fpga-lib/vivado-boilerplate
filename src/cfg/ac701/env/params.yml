@@ -1,0 +1,6 @@
+
+import : clk
+
+parameters:
+    VERBOSE  : 1
+    BASE_CLK : = clk.MAIN_CLK
