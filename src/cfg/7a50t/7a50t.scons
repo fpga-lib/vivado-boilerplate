@@ -86,8 +86,10 @@ OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 Depends(WLib,              [IP_SimLib, CfgParamsHeader])
 Depends(LaunchQuestaRun,   WLib)
 Depends(VivadoProject, [CfgParamsHeader, CfgParamsTcl])
-Requires(VivadoProject, IP_OOC_Syn)
 Depends(OpenVivadoProject, [IP_OOC_Syn])
+
+if not 'xpr' in COMMAND_LINE_TARGETS: 
+    Requires(VivadoProject, IP_OOC_Syn) 
 
 envx.AlwaysBuild(WLib)
 envx.AlwaysBuild(LaunchQuestaGui)
