@@ -25,8 +25,8 @@ if { ${BASE_CLK} > 150 } {
 
 if { ${VERBOSE} } {
     puts ""
-    puts "    Synthesis strategy:  ${synth_strategy}"
-    puts "    P&R strategy:        ${impl_strategy}"
+    puts "    Syn strategy:  ${synth_strategy}"
+    puts "    P&R strategy:  ${impl_strategy}"
     puts ""
 }
 
