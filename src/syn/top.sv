@@ -11,8 +11,6 @@
 
 `define WIDTH 4
 
-`define DIFF_REFCLK
-
 module automatic top
 (
 `ifdef DIFF_REFCLK

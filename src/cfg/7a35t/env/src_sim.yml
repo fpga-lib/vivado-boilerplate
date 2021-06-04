@@ -1,0 +1,4 @@
+
+sources:
+    - src/sim/top_tb.sv
+

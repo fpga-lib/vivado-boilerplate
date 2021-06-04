@@ -1,0 +1,69 @@
+
+import: settings
+
+type : pcie_7x
+
+config:
+    Device_Port_Type     : PCI_Express_Endpoint_device
+    Interface_Width      : 64_bit
+    Maximum_Link_Width   : = 'X' + settings.LINK_WIDTH
+    Link_Speed           : = settings.LINK_SPEED + '_GT/s'
+    Ref_Clk_Freq         : 100_MHz
+                         
+    pipe_mode_sim        : Enable_Pipe_Simulation
+    pipe_sim             : true
+                         
+    mode_selection       : Advanced 
+    PCIe_Debug_Ports     : false                               # disable DRP
+                         
+    #Xlnx_Ref_Board       : AC701 
+                         
+    Extended_Tag_Default : true
+    Extended_Tag_Field   : true
+
+#-------------------------------------------------------------------
+#
+#   IDs
+#
+#CONFIG.Device_ID      7024
+
+#-------------------------------------------------------------------
+#
+#   BAR0
+#
+    Bar0_64bit        : false
+    Bar0_Enabled      : true
+    Bar0_Prefetchable : false
+    Bar0_Scale        : Kilobytes
+    Bar0_Size         : 2
+    Bar0_Type         : Memory
+
+#-------------------------------------------------------------------
+#
+#   BAR3
+#
+    Bar3_64bit        : true
+    Bar3_Enabled      : true
+    Bar3_Prefetchable : false
+    Bar3_Scale        : Kilobytes
+    Bar3_Size         : 16
+    Bar3_Type         : Memory
+
+#-------------------------------------------------------------------
+#
+#   Resources
+#
+    Max_Payload_Size  : = str(settings.PCIE_MPS) + '_bytes'
+    Perf_Level        : High
+    Buf_Opt_BMA       : true
+
+#-------------------------------------------------------------------
+#
+#   Interrupts
+#
+    MSI_64b                  : true
+    MSI_Enabled              : true
+    Multiple_Message_Capable : 1_vector
+
+#-------------------------------------------------------------------
+
