@@ -78,7 +78,9 @@ VivadoProject      = envx.CreateVivadoProject(src_xpr , IP_Cores)
 #   launch tools
 LaunchQuestaGui    = envx.LaunchQuestaGui()
 LaunchQuestaRun    = envx.LaunchQuestaRun()
-BuildVivadoProject = envx.LaunchBuildVivadoProject(VivadoProject)
+
+SynthVivadoProject = envx.LaunchSynthVivadoProject(VivadoProject)
+ImplVivadoProject  = envx.LaunchImplVivadoProject(SynthVivadoProject)
 OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 
 #   explicit dependencies and directives
@@ -94,7 +96,7 @@ envx.AlwaysBuild(WLib)
 envx.AlwaysBuild(LaunchQuestaGui)
 
 Default(WLib)
-all = [WLib, BuildVivadoProject]
+all = [WLib, ImplVivadoProject]
 
 #-------------------------------------------------------------------------------
 #
@@ -112,9 +114,12 @@ envx.Alias('cparam-tcl', [CfgParamsTcl])
 envx.Alias('wlib',       WLib)
 envx.Alias('qs_gui',     LaunchQuestaGui)
 envx.Alias('qs_run',     LaunchQuestaRun)
+
 envx.Alias('xpr',        VivadoProject)
-envx.Alias('xprbld',     BuildVivadoProject)
+envx.Alias('xprsyn',     SynthVivadoProject)
+envx.Alias('xprimpl',    ImplVivadoProject)
 envx.Alias('xpropen',    OpenVivadoProject)
+
 envx.Alias('all',        all)
 
 #-------------------------------------------------------------------------------
@@ -128,16 +133,20 @@ Help("""
         ipss       : IP Synthesize Scripts
         ip_cores   : Create IPs
         ip_ooc     : Create IP design checkpoints by sythisizing of 'xci's
+
         ip_sls     : IP SimLib Scripts
         simlib     : IP SimLib (default)
         cparam     : generate parameter headers
         cparam-tcl : generate parameters list Tcl scripts
         wlib       : compile work library (default)
         qs_gui     : launch Questa GUI in destination dir with tool script loaded
+
         xpr        : create Vivado Project
-        xprbld     : build Vivado Project
+        xprsyn     : synthesize Vivado Project
+        xprimpl    : implement Vivado Project
         xpropen    : open Vivado Project in GUI mode
-        all        : build wlib and xprbld targets
+
+        all        : build wlib and xprimpl targets
 ********************************************************************************     
 """)
 #-------------------------------------------------------------------------------
