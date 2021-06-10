@@ -17,6 +17,20 @@ dirs = import_config('dirpath.yml')
 
 #-------------------------------------------------------------------------------
 #
+#    Sources
+#
+src_syn        = read_sources('src_syn.yml')
+src_sim        = read_sources('src_sim.yml')
+ip             = read_sources('ip.yml')
+xdc            = read_sources('xdc.yml')
+xpr_hook       = read_sources('xpr_hook.yml')
+
+syn_deps       = src_syn + xdc
+hdl_param_deps = 'main.yml clk.yml'
+xpr_deps       = 'src_syn.yml xdc.yml'.split() + xpr_hook
+
+#-------------------------------------------------------------------------------
+#
 #    Environment
 #
 Import('envx')
@@ -30,8 +44,8 @@ envx['TESTBENCH_NAME']      = cfg.TESTBENCH_NAME
 envx['DEVICE']              = cfg.DEVICE
 
 # path
-envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # dir for setting files (typically *.yml)
-envx['INC_PATH']             = envx['BUILD_SRC_PATH']
+envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]                               # dir for settings files (typically *.yml)
+envx['INC_PATH']             = [envx['BUILD_SRC_PATH']] + get_dirs(src_syn)
 envx['SIM_INC_PATH']         = envx['INC_PATH']
 
 envx.Append(VLOG_FLAGS = ' -O5 -timescale=1ns/1ps')
@@ -42,19 +56,6 @@ envx.Append(USER_DEFINED_PARAMS = {'ROOT_DIR'      : envx['ROOT_PATH']})
 envx.Append(USER_DEFINED_PARAMS = {'CFG_DIR'       : envx['CFG_PATH']})
 envx.Append(USER_DEFINED_PARAMS = {'BUILD_SRC_DIR' : envx['BUILD_SRC_PATH']})
 
-#-------------------------------------------------------------------------------
-#
-#    Sources
-#
-src_syn        = read_sources('src_syn.yml')
-src_sim        = read_sources('src_sim.yml')
-ip             = read_sources('ip.yml')
-xdc            = read_sources('xdc.yml')
-xpr_hook       = read_sources('xpr_hook.yml')
-
-syn_deps       = src_syn + xdc
-hdl_param_deps = 'main.yml clk.yml'
-xpr_deps       = 'src_syn.yml xdc.yml'.split() + xpr_hook
 
 #-------------------------------------------------------------------------------
 #
