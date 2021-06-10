@@ -30,7 +30,7 @@ envx['TESTBENCH_NAME']      = cfg.TESTBENCH_NAME
 envx['DEVICE']              = cfg.DEVICE
 
 # path
-envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # root dir for setting files (typically *.yml)
+envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]             # dir for setting files (typically *.yml)
 envx['INC_PATH']             = envx['BUILD_SRC_PATH']
 envx['SIM_INC_PATH']         = envx['INC_PATH']
 
@@ -46,12 +46,15 @@ envx.Append(USER_DEFINED_PARAMS = {'BUILD_SRC_DIR' : envx['BUILD_SRC_PATH']})
 #
 #    Sources
 #
-src     = read_sources('src_syn.yml')
-src_sim = read_sources('src_sim.yml')
-ip      = read_sources('ip.yml')
+src_syn        = read_sources('src_syn.yml')
+src_sim        = read_sources('src_sim.yml')
+ip             = read_sources('ip.yml')
+xdc            = read_sources('xdc.yml')
+xpr_hook       = read_sources('xpr_hook.yml')
 
-src_par = 'main.yml clk.yml'
-src_xpr = ['src_syn.yml', 'xdc.yml', 'xpr_hook.tcl']
+syn_deps       = src_syn + xdc
+hdl_param_deps = 'main.yml clk.yml'
+xpr_deps       = 'src_syn.yml xdc.yml'.split() + xpr_hook
 
 #-------------------------------------------------------------------------------
 #
@@ -68,28 +71,28 @@ IP_SimLib_Scripts  = envx.IpSimLibScripts(IP_Cores)
 IP_SimLib          = envx.CompileSimLib(IP_SimLib_Scripts)
                    
 #   generated sources
-CfgParamsHeader    = envx.CreateCfgParamsHeader(os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.svh'), src_par)
+CfgParamsHeader    = envx.CreateCfgParamsHeader(os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.svh'), hdl_param_deps)
 CfgParamsTcl       = envx.CreateCfgParamsTcl(os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.tcl'), 'params.yml')
                    
 #   main targets
-WLib               = envx.CompileWorkLib(src + src_sim)
-VivadoProject      = envx.CreateVivadoProject(src_xpr , IP_Cores)
+WLib               = envx.CompileWorkLib(src_syn + src_sim)
+VivadoProject      = envx.CreateVivadoProject(xpr_deps , IP_Cores)
                 
 #   launch tools
 LaunchQuestaGui    = envx.LaunchQuestaGui()
 LaunchQuestaRun    = envx.LaunchQuestaRun()
 
-SynthVivadoProject = envx.LaunchSynthVivadoProject(VivadoProject)
+SynthVivadoProject = envx.LaunchSynthVivadoProject(VivadoProject, syn_deps)
 ImplVivadoProject  = envx.LaunchImplVivadoProject(SynthVivadoProject)
 OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 
 #   explicit dependencies and directives
 Depends(WLib,              [IP_SimLib, CfgParamsHeader])
 Depends(LaunchQuestaRun,   WLib)
-Depends(VivadoProject, [CfgParamsHeader, CfgParamsTcl])
+Depends(VivadoProject,     [CfgParamsTcl])
 Depends(OpenVivadoProject, [IP_OOC_Syn])
 
-if not 'xpr' in COMMAND_LINE_TARGETS: 
+if not 'prj' in COMMAND_LINE_TARGETS: 
     Requires(VivadoProject, IP_OOC_Syn) 
 
 envx.AlwaysBuild(WLib)
@@ -115,10 +118,10 @@ envx.Alias('wlib',       WLib)
 envx.Alias('qs_gui',     LaunchQuestaGui)
 envx.Alias('qs_run',     LaunchQuestaRun)
 
-envx.Alias('xpr',        VivadoProject)
-envx.Alias('xprsyn',     SynthVivadoProject)
-envx.Alias('xprimpl',    ImplVivadoProject)
-envx.Alias('xpropen',    OpenVivadoProject)
+envx.Alias('prj',        VivadoProject)
+envx.Alias('prjsyn',     SynthVivadoProject)
+envx.Alias('prjimpl',    ImplVivadoProject)
+envx.Alias('prjopen',    OpenVivadoProject)
 
 envx.Alias('all',        all)
 
@@ -141,10 +144,10 @@ Help("""
         wlib       : compile work library (default)
         qs_gui     : launch Questa GUI in destination dir with tool script loaded
 
-        xpr        : create Vivado Project
-        xprsyn     : synthesize Vivado Project
-        xprimpl    : implement Vivado Project
-        xpropen    : open Vivado Project in GUI mode
+        prj        : create Vivado Project
+        prjsyn     : synthesize Vivado Project
+        prjimpl    : implement Vivado Project
+        prjopen    : open Vivado Project in GUI mode
 
         all        : build wlib and xprimpl targets
 ********************************************************************************     
