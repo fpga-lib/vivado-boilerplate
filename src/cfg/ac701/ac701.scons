@@ -78,7 +78,7 @@ CfgParamsTcl       = envx.CreateCfgParamsTcl(os.path.join(envx['BUILD_SRC_PATH']
 #   main targets
 WLib               = envx.CompileWorkLib(src_syn + src_sim)
 VivadoProject      = envx.CreateVivadoProject(xpr_deps , IP_Cores)
-                
+
 #   launch tools
 LaunchQuestaGui    = envx.LaunchQuestaGui()
 LaunchQuestaRun    = envx.LaunchQuestaRun()
