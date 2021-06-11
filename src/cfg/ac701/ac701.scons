@@ -92,7 +92,7 @@ Depends(WLib,               [IP_SimLib, CfgParamsHeader])
 Depends(LaunchQuestaRun,    WLib)
 Depends(VivadoProject,      [CfgParamsTcl])
 Depends(SynthVivadoProject, [CfgParamsHeader])
-Depends(OpenVivadoProject,  [IP_OOC_Syn])
+Depends(OpenVivadoProject,  [IP_OOC_Syn, CfgParamsHeader])
 
 if not 'prj' in COMMAND_LINE_TARGETS: 
     Requires(VivadoProject, IP_OOC_Syn) 
