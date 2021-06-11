@@ -43,13 +43,13 @@ envx['ENV']['PATH'] = os.environ['PATH']
 #
 variant = ARGUMENTS.get('variant', 'ac701')
 
-variant = ARGUMENTS.get('variant', 'ac701')
+variant_name = variant.split(os.sep)[-1]
 
 print_info('*'*80)
-print_info(' '*27 + 'build variant: ' + variant.split('/')[-1])
+print_info(' '*27 + 'build variant: ' + variant_name)
 print_info('*'*80 + '\n')
 
-variant_path = os.path.join('src', 'cfg', variant, variant.split('/')[-1] + '.scons')
+variant_path = os.path.join('src', 'cfg', variant, variant_name + '.scons')
 
 if not os.path.exists(variant_path):
     print_error('\nError: unsupported variant: ' + variant)
