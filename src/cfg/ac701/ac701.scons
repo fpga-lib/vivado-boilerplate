@@ -88,10 +88,11 @@ ImplVivadoProject  = envx.LaunchImplVivadoProject(SynthVivadoProject)
 OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 
 #   explicit dependencies and directives
-Depends(WLib,              [IP_SimLib, CfgParamsHeader])
-Depends(LaunchQuestaRun,   WLib)
-Depends(VivadoProject,     [CfgParamsTcl])
-Depends(OpenVivadoProject, [IP_OOC_Syn])
+Depends(WLib,               [IP_SimLib, CfgParamsHeader])
+Depends(LaunchQuestaRun,    WLib)
+Depends(VivadoProject,      [CfgParamsTcl])
+Depends(SynthVivadoProject, [CfgParamsHeader])
+Depends(OpenVivadoProject,  [IP_OOC_Syn])
 
 if not 'prj' in COMMAND_LINE_TARGETS: 
     Requires(VivadoProject, IP_OOC_Syn) 
@@ -150,7 +151,7 @@ Help("""
         prjimpl    : implement Vivado Project
         prjopen    : open Vivado Project in GUI mode
 
-        all        : build wlib and xprimpl targets
+        all        : build wlib and prjimpl targets
 ********************************************************************************     
 """)
 #-------------------------------------------------------------------------------
