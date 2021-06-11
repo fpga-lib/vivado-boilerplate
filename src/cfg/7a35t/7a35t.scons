@@ -145,6 +145,7 @@ Help("""
         cparam-tcl : generate parameters list Tcl scripts
         wlib       : compile work library (default)
         qs_gui     : launch Questa GUI in destination dir with tool script loaded
+        qs_run     : launch simulation run in non-GUI mode
 
         prj        : create Vivado Project
         prjsyn     : synthesize Vivado Project
