@@ -132,7 +132,7 @@ envx.Alias('all',        all)
 #    Info
 #
 Help("""
-    Variant 'ac701' available targets:
+    Variant '%s' available targets:
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         ipcs       : IP Create Scripts
         ipss       : IP Synthesize Scripts
@@ -154,6 +154,6 @@ Help("""
 
         all        : build wlib and prjimpl targets
 ********************************************************************************     
-""")
+""" % os.getcwd().split(os.sep)[-1])
 #-------------------------------------------------------------------------------
 
