@@ -19,7 +19,7 @@ help_info ="""
      
     Usage:
     ~~~~~  
-    scons [variant=<name>] [targets]
+    scons [variant=<[path/]name>] [targets]
 """
 
 Help(help_info)
