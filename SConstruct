@@ -34,8 +34,17 @@ Help(help_info)
 #
 #    Environment
 #
+MENTOR = os.environ['MENTOR']
+
 envx = Environment() #( tools = {} )
-envx['ENV']['PATH'] = os.environ['PATH']
+
+envx['ENV']['PATH']    = os.environ['PATH']
+envx['ENV']['CAD']     = os.environ['CAD']
+envx['ENV']['DISPLAY'] = os.environ['DISPLAY']
+envx['ENV']['HOME']    = os.environ['HOME']
+envx['QUESTABIN']      = os.path.join(MENTOR, 'questa', 'questasim', 'bin')
+envx['QUESTASIM']      = os.path.join(MENTOR, 'questa.sh')
+
 
 #-------------------------------------------------------------------------------
 #
