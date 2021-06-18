@@ -9,6 +9,7 @@
 #--------------------------------------------------------------------------------
 
 source $BUILD_SRC_DIR/cfg_params.tcl
+source $BUILD_SRC_DIR/ila_params.tcl
 
 #-------------------------------------------------------------------------------
 #
@@ -23,17 +24,19 @@ if { ${BASE_CLK} > 150 } {
     set impl_strategy  {Vivado Implementation Defaults}
 }
 
-if { ${VERBOSE} } {
+set_property strategy ${synth_strategy} [get_runs synth_1]
+
+set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+set_property strategy ${impl_strategy}             [get_runs impl_1]
+
+if { [info exists VERBOSE] && ${VERBOSE} } {
     puts ""
     puts "    Syn strategy:  ${synth_strategy}"
     puts "    P&R strategy:  ${impl_strategy}"
     puts ""
 }
 
-set_property strategy ${synth_strategy} [get_runs synth_1]
-
-set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
-set_property strategy ${impl_strategy}             [get_runs impl_1]
+set_property STEPS.INIT_DESIGN.TCL.PRE $BUILD_SRC_DIR/ila_params.tcl [get_runs impl_1]
 
 #-------------------------------------------------------------------------------
 #
@@ -49,6 +52,19 @@ foreach f $ip_ooc {
     } else {
         puts "No file " $f
     }    
+}
+#-------------------------------------------------------------------------------
+#
+#    Set constraint files for ILA
+#
+if { $USE_ILA == 1} {
+    set ila_proc [file join $ROOT_DIR site_scons/ila_proc.tcl]
+    set ila_pcie [file join $CFG_DIR tcl/ila.tcl]
+
+    add_files -fileset constrs_1 -norecurse "$ila_proc $ila_pcie"
+    set_property used_in_synthesis false  [get_files  "$ila_proc $ila_pcie"]
+    set_property used_in_simulation false [get_files  "$ila_proc $ila_pcie"]
+    puts "add ILA script files"
 }
 #-------------------------------------------------------------------------------
 #
@@ -70,6 +86,12 @@ foreach f $impl_xdc {
 #    Set message rules
 #
 common::send_msg_id "CFG_PRJ 02-001" "INFO" "Add message rules"
+
+#-----------------------------------------------------------
+#
+#    Suppress common warnings
+#
+set_msg_config -id {Constraints 18-5210} -string {{WARNING: [Constraints 18-5210] No constraint will be written out.} } -suppress
 
 #---------------------------------------
 #

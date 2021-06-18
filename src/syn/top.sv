@@ -46,6 +46,21 @@ logic pll_locked;
 
 //------------------------------------------------------------------------------
 //
+//    ILA debug
+//
+`ifdef TOP_DEBUG_ENABLE
+
+(* mark_debug = "true" *) logic [`WIDTH-1:0] dbg_out;
+(* mark_debug = "true" *) logic              dbg_pll_locked;
+
+assign dbg_out        = out;
+assign dbg_pll_locked = pll_locked;
+
+`endif // TOP_DEBUG_ENABLE
+
+
+//------------------------------------------------------------------------------
+//
 //    Functions and tasks
 //
 
