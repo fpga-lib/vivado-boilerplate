@@ -9,6 +9,7 @@ config:
     CLKOUT1_REQUESTED_OUT_FREQ : = clk.MAIN_CLK
     USE_LOCKED                 : true
     USE_RESET                  : false
+    PRIM_SOURCE                : No_buffer
     USE_SAFE_CLOCK_STARTUP     : true
  
  
