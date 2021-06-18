@@ -19,7 +19,7 @@ help_info ="""
      
     Usage:
     ~~~~~  
-    scons [variant=<name>] [targets]
+    scons [variant=<[path/]name>] [targets]
 """
 
 Help(help_info)
@@ -34,8 +34,17 @@ Help(help_info)
 #
 #    Environment
 #
+MENTOR = os.environ['MENTOR']
+
 envx = Environment() #( tools = {} )
-envx['ENV']['PATH'] = os.environ['PATH']
+
+envx['ENV']['PATH']    = os.environ['PATH']
+envx['ENV']['CAD']     = os.environ['CAD']
+envx['ENV']['DISPLAY'] = os.environ['DISPLAY']
+envx['ENV']['HOME']    = os.environ['HOME']
+envx['QUESTABIN']      = os.path.join(MENTOR, 'questa', 'questasim', 'bin')
+envx['QUESTASIM']      = os.path.join(MENTOR, 'questa.sh')
+
 
 #-------------------------------------------------------------------------------
 #
@@ -43,11 +52,14 @@ envx['ENV']['PATH'] = os.environ['PATH']
 #
 variant = ARGUMENTS.get('variant', 'ac701')
 
+variant_name = variant.split(os.sep)[-1]
+
 print_info('*'*80)
-print_info(' '*27 + 'build variant: ' + variant)
+print_info(' '*27 + 'build variant: ' + variant_name)
 print_info('*'*80 + '\n')
 
-variant_path = os.path.join('src', 'cfg', variant, variant + '.scons')
+variant_path = os.path.join('src', 'cfg', variant, variant_name + '.scons')
+
 if not os.path.exists(variant_path):
     print_error('\nError: unsupported variant: ' + variant)
     print(help_info)

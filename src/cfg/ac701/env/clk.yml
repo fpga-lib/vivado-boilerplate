@@ -4,7 +4,7 @@ import : board
 parameters:
     REF_CLK         : = board.OSC_FREQ              # MHz
     MAIN_CLK        : 125                           # MHz   
-    DIFF_REFCLK     : ' '            
+    DIFF_REFCLK     : = ''            
 
     CLK_FREQ        : = int(REF_CLK*1e6)
     CLK_PERIOD      : = str(1e9/CLK_FREQ) + 'ns'    #
