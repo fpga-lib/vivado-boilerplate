@@ -1,6 +1,6 @@
 
 options: 
-    suffix : _ILA
+    suffix       : _ILA
 
 parameters:
     USE          : 0
