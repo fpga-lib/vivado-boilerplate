@@ -14,6 +14,8 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 #    ref_clk
 #-------------------------------------------------------------------------------
 
+#create_clock -period $REF_CLK_PERIOD [get_ports ref_clk]
+
 set_property -dict {PACKAGE_PIN N11 IOSTANDARD LVCMOS33} [get_ports ref_clk]
 set_switching_activity -deassert_resets
 

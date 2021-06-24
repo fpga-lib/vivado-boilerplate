@@ -56,11 +56,16 @@ envx.Append(USER_DEFINED_PARAMS = {'ROOT_DIR'      : envx['ROOT_PATH']})
 envx.Append(USER_DEFINED_PARAMS = {'CFG_DIR'       : envx['CFG_PATH']})
 envx.Append(USER_DEFINED_PARAMS = {'BUILD_SRC_DIR' : envx['BUILD_SRC_PATH']})
 
+envx['PROJECT_CREATE_FLAGS'] = '-f'
+
 
 #-------------------------------------------------------------------------------
 #
 #    Targets
 #
+
+cfg_params_header = os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.svh')
+cfg_params_tcl    = os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.tcl')
 
 #   scripts
 IP_Create_Scripts  = envx.IpCreateScripts(ip)
@@ -72,9 +77,8 @@ IP_SimLib_Scripts  = envx.IpSimLibScripts(IP_Cores)
 IP_SimLib          = envx.CompileSimLib(IP_SimLib_Scripts)
                    
 #   generated sources
-CfgParamsHeader    = envx.CreateCfgParamsHeader(os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.svh'), hdl_param_deps)
-CfgParamsTcl       = envx.CreateCfgParamsTcl(os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.tcl'), 'params.yml')
-IlaParamsTcl       = envx.CreateCfgParamsTcl(os.path.join(envx['BUILD_SRC_PATH'], 'ila_params.tcl'), 'ila.yml')
+CfgParamsHeader    = envx.CreateCfgParamsHeader(cfg_params_header, hdl_param_deps)
+CfgParamsTcl       = envx.CreateCfgParamsTcl(cfg_params_tcl, 'params.yml clk.yml ila.yml')
                    
 #   main targets
 WLib               = envx.CompileWorkLib(src_syn + src_sim)
@@ -90,7 +94,7 @@ OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 #   explicit dependencies and directives
 Depends(WLib,               [IP_SimLib, CfgParamsHeader])
 Depends(LaunchQuestaRun,    WLib)
-Depends(VivadoProject,      [CfgParamsTcl, IlaParamsTcl])
+Depends(VivadoProject,      [CfgParamsTcl])
 Depends(SynthVivadoProject, [CfgParamsHeader])
 Depends(ImplVivadoProject,  [prj_impl_deps])
 Depends(OpenVivadoProject,  [IP_OOC_Syn, CfgParamsHeader])
@@ -116,7 +120,7 @@ envx.Alias('ip_ooc',     IP_OOC_Syn)
 envx.Alias('ip_sls',     IP_SimLib_Scripts)
 envx.Alias('simlib',     IP_SimLib)
 envx.Alias('cparam',     CfgParamsHeader)
-envx.Alias('cparam-tcl', [CfgParamsTcl, IlaParamsTcl])
+envx.Alias('cparam-tcl', CfgParamsTcl)
 envx.Alias('wlib',       WLib)
 envx.Alias('qs_gui',     LaunchQuestaGui)
 envx.Alias('qs_run',     LaunchQuestaRun)

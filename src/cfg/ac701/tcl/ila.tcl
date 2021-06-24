@@ -18,7 +18,7 @@ connect_debug_port ila_core/clk [get_nets -hier -filter {NAME =~ *pll_inst/inst/
 #
 #    Top module
 #
-if { $TOP_DEBUG_ENABLE } {
+if { $TOP_ENABLE_ILA } {
     net2probe ila_core [get_nets -hier -filter {NAME =~ dbg_out[*]}]
     net2probe ila_core [get_nets -hier -filter {NAME =~ dbg_pll_locked}]
 }
