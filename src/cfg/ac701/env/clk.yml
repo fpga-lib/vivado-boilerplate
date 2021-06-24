@@ -10,4 +10,5 @@ parameters:
     CLK_PERIOD      : = str(1e9/CLK_FREQ) + 'ns'    #
     CLK_HALF_PERIOD : = str(1e9/CLK_FREQ/2) + 'ns'  #
 
+    REF_CLK_PERIOD  : = str(int(1e3/REF_CLK))
 

@@ -1,14 +1,17 @@
 
 import  : main
 
+options:
+    suffix         : _DIR
+
 parameters:
     ROOT           : = os.path.abspath(str(Dir('#')))
-    LIB            : = os.path.join(ROOT,    'lib')
-    SRC            : = os.path.join(ROOT,     'src')
-    CFG            : = os.path.join(SRC, 'cfg', main.VARIANT_NAME)
-    SRC_SYN        : = os.path.join(SRC,      'syn')
-    SRC_SIM        : = os.path.join(SRC,      'sim')
-    SETTINGS       : = os.path.join(CFG, 'env')
+    LIB            : = os.path.join(ROOT, 'lib')
+    SRC            : = os.path.join(ROOT, 'src')
+    CFG            : = os.path.join(SRC,  'cfg', main.VARIANT_NAME)
+    SRC_SYN        : = os.path.join(SRC,  'syn')
+    SRC_SIM        : = os.path.join(SRC,  'sim')
+    SETTINGS       : = os.path.join(CFG,  'env')
     BUILD          : = os.path.join(ROOT, 'build', main.VARIANT_NAME)
                    
 

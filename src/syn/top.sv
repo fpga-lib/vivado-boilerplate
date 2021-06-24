@@ -48,7 +48,7 @@ logic pll_locked;
 //
 //    ILA debug
 //
-`ifdef TOP_DEBUG_ENABLE
+`ifdef TOP_ENABLE_ILA
 
 (* mark_debug = "true" *) logic [`WIDTH-1:0] dbg_out;
 (* mark_debug = "true" *) logic              dbg_pll_locked;

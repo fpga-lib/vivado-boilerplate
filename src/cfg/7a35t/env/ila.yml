@@ -1,6 +1,9 @@
 
+options:
+    suffix       : _ILA 
+
 parameters:
-    USE_ILA            : 0
-    TOP_DEBUG_ENABLE   : 0
+    USE          : 0
+    TOP_ENABLE   : 0
 
 
