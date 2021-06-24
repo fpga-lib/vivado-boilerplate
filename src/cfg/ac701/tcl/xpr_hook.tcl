@@ -9,7 +9,6 @@
 #--------------------------------------------------------------------------------
 
 source $BUILD_SRC_DIR/cfg_params.tcl
-source $BUILD_SRC_DIR/ila_params.tcl
 
 #-------------------------------------------------------------------------------
 #
@@ -36,7 +35,8 @@ if { [info exists VERBOSE] && ${VERBOSE} } {
     puts ""
 }
 
-set_property STEPS.INIT_DESIGN.TCL.PRE $BUILD_SRC_DIR/ila_params.tcl [get_runs impl_1]
+set_property STEPS.SYNTH_DESIGN.TCL.PRE $BUILD_SRC_DIR/cfg_params.tcl [get_runs synth_1]
+set_property STEPS.INIT_DESIGN.TCL.PRE $BUILD_SRC_DIR/cfg_params.tcl  [get_runs impl_1]
 
 #-------------------------------------------------------------------------------
 #
