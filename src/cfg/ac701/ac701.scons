@@ -7,6 +7,7 @@
 #-------------------------------------------------------------------------------
 
 import os
+import sys
 
 #-------------------------------------------------------------------------------
 #
@@ -14,6 +15,8 @@ import os
 #
 cfg  = import_config('main.yml')
 dirs = import_config('dirpath.yml')
+
+sys.path.append(dirs.SCRIPT)
 
 #-------------------------------------------------------------------------------
 #
@@ -28,7 +31,9 @@ xpr_hook       = read_sources('xpr_hook.yml')
 syn_deps       = src_syn + xdc
 hdl_param_deps = 'main.yml clk.yml ila.yml'
 xpr_deps       = 'src_syn.yml xdc.yml'.split() + xpr_hook
-prj_impl_deps  = os.path.join(dirs.CFG, 'tcl', 'ila.tcl')
+
+ila_settings   = os.path.join(dirs.CFG, 'script', 'ila.tcl') 
+prj_impl_deps  = [ila_settings]
 #-------------------------------------------------------------------------------
 #
 #    Environment
@@ -66,6 +71,9 @@ envx['PROJECT_CREATE_FLAGS'] = '-f'
 
 cfg_params_header = os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.svh')
 cfg_params_tcl    = os.path.join(envx['BUILD_SRC_PATH'], 'cfg_params.tcl')
+impl_env_tcl      = os.path.join(envx['BUILD_SRC_PATH'], 'impl_env.tcl')
+
+prj_impl_deps.append(impl_env_tcl)
 
 #   scripts
 IP_Create_Scripts  = envx.IpCreateScripts(ip)
@@ -79,6 +87,7 @@ IP_SimLib          = envx.CompileSimLib(IP_SimLib_Scripts)
 #   generated sources
 CfgParamsHeader    = envx.CreateCfgParamsHeader(cfg_params_header, hdl_param_deps)
 CfgParamsTcl       = envx.CreateCfgParamsTcl(cfg_params_tcl, 'params.yml clk.yml ila.yml')
+ImplEnvTcl         = envx.CreateCfgParamsTcl(impl_env_tcl, 'main.yml clk.yml dirpath.yml ila.yml')
                    
 #   main targets
 WLib               = envx.CompileWorkLib(src_syn + src_sim)
@@ -94,9 +103,9 @@ OpenVivadoProject  = envx.LaunchOpenVivadoProject(VivadoProject)
 #   explicit dependencies and directives
 Depends(WLib,               [IP_SimLib, CfgParamsHeader])
 Depends(LaunchQuestaRun,    WLib)
-Depends(VivadoProject,      [CfgParamsTcl])
+Depends(VivadoProject,      [CfgParamsTcl, ImplEnvTcl])
 Depends(SynthVivadoProject, [CfgParamsHeader])
-Depends(ImplVivadoProject,  [prj_impl_deps])
+Depends(ImplVivadoProject,  prj_impl_deps)
 Depends(OpenVivadoProject,  [IP_OOC_Syn, CfgParamsHeader])
 
 if not 'prj' in COMMAND_LINE_TARGETS: 
@@ -107,6 +116,7 @@ envx.AlwaysBuild(LaunchQuestaGui)
 
 Default(WLib)
 all = [WLib, ImplVivadoProject]
+
 
 #-------------------------------------------------------------------------------
 #
@@ -160,5 +170,39 @@ Help("""
         all        : build wlib and prjimpl targets
 ********************************************************************************     
 """ % os.getcwd().split(os.sep)[-1])
+
+#-------------------------------------------------------------------------------
+#
+#  Extensions
+#
+from tabulate import tabulate
+import vivado_report as vrpt
+
+warn_opt_str = ARGUMENTS.get('warn', 'all')
+warn_opt     = warn_opt_str.split()
+
+def warning_summary(target, source, env):
+    vrpt.warning_report(env, 'syn')
+
+def show_reports(target, source, env):
+    vrpt.utilization_report(env)
+    vrpt.timing_report(env)
+    vrpt.warning_report(env, warn_opt)
+
+
+Rpt = envx.Command(['reports'], [], show_reports)
+
+envx.Alias('rpt', Rpt)
+envx.AddPostAction(SynthVivadoProject,  warning_summary)
+envx.AddPostAction(ImplVivadoProject, show_reports)
+
+Help("""
+    Report control
+    ~~~~~~~~~~~~~~
+
+    scons -s rpt            : display utilization, timing and warning summary info
+    scosn -s rpt warn=<arg> : can be 'syn', 'impl', 'all'. 
+                              Display corresponding warnings
+""")
 #-------------------------------------------------------------------------------
 
