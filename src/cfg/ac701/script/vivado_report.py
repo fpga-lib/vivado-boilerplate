@@ -23,7 +23,7 @@ def timing_report(env):
 
     filepath = os.path.join(env['BUILD_SYN_PATH'], env['VIVADO_PROJECT_NAME'] + '.runs', 'impl_1', env['TOP_NAME'] + '_final_timing.rpt')
     if not os.path.exists(filepath):
-        print('Timing Summary Report file does not exist')
+        print( colorize('Timing Summary Report file does not exist', 'yellow', True) )
         return
         
     with open(filepath) as fn:
@@ -52,7 +52,7 @@ def utilization_report(env):
         'CLB'             : '\|\s+CLB\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
         'Slice'           : '\|\s+Slice\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
         'CLB LUT'         : '\|\s+CLB LUTs\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
-        'Slice LUT'       : '\|\s+Slice\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
+        'Slice LUT'       : '\|\s+Slice LUTs\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
         '  LUT Logic'     : '\|\s+LUT as Logic\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
         '  LUT RAM'       : '\|\s+LUT as Memory\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
         'CLB Registers'   : '\|\s+CLB Registers\s+\|\s+(\d+)\s+\|\s+\d+\s+\|\s+(\d+)\s+\|\s+([<0-9\.]+)\s+\|',
@@ -123,10 +123,6 @@ def log_file_filter(env):
 def warning_report(env, opt='all'):
     syn_warn, syn_crit_warn, impl_warn, impl_crit_warn = log_file_filter(env)
     
-#   print('')
-#   print_info('-'*80)
-#   print_info(' '*27 + 'Warning Summary')
-#   print_info('-'*80 + '\n')
     if 'syn' in opt or 'all' in opt:
         for w in syn_warn:
             print( colorize(w[0], 'yellow'), w[1] )
