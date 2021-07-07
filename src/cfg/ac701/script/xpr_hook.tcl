@@ -35,8 +35,10 @@ if { [info exists VERBOSE] && ${VERBOSE} } {
     puts ""
 }
 
-set_property STEPS.SYNTH_DESIGN.TCL.PRE $BUILD_SRC_DIR/cfg_params.tcl [get_runs synth_1]
-set_property STEPS.INIT_DESIGN.TCL.PRE $BUILD_SRC_DIR/cfg_params.tcl  [get_runs impl_1]
+set_property STEPS.SYNTH_DESIGN.TCL.PRE $BUILD_SRC_DIR/cfg_params.tcl    [get_runs synth_1]
+set_property STEPS.INIT_DESIGN.TCL.PRE $BUILD_SRC_DIR/impl_env.tcl       [get_runs impl_1]
+set_property STEPS.WRITE_BITSTREAM.TCL.POST $CFG_DIR/script/rpt_hook.tcl [get_runs impl_1]
+
 
 #-------------------------------------------------------------------------------
 #
