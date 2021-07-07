@@ -181,19 +181,20 @@ import vivado_report as vrpt
 warn_opt_str = ARGUMENTS.get('warn', 'all')
 warn_opt     = warn_opt_str.split()
 
+def warning_summary(target, source, env):
+    vrpt.warning_report(env, 'syn')
+
 def show_reports(target, source, env):
-    #print( vrpt.get_hier_util_report(env, 0) )
     vrpt.utilization_report(env)
     vrpt.timing_report(env)
     vrpt.warning_report(env, warn_opt)
 
 
-Reports = envx.Action(show_reports)
-
-Rpt = envx.Command(['reports'], [], Reports)
+Rpt = envx.Command(['reports'], [], show_reports)
 
 envx.Alias('rpt', Rpt)
-envx.AddPostAction(ImplVivadoProject, Reports)
+envx.AddPostAction(SynthVivadoProject,  warning_summary)
+envx.AddPostAction(ImplVivadoProject, show_reports)
 
 Help("""
     Report control
@@ -202,7 +203,6 @@ Help("""
     scons -s rpt            : display utilization, timing and warning summary info
     scosn -s rpt warn=<arg> : can be 'syn', 'impl', 'all'. 
                               Display corresponding warnings
-
 """)
 #-------------------------------------------------------------------------------
 

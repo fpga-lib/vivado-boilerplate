@@ -123,21 +123,17 @@ def log_file_filter(env):
 def warning_report(env, opt='all'):
     syn_warn, syn_crit_warn, impl_warn, impl_crit_warn = log_file_filter(env)
     
+#   print('')
+#   print_info('-'*80)
+#   print_info(' '*27 + 'Warning Summary')
+#   print_info('-'*80 + '\n')
     if 'syn' in opt or 'all' in opt:
-        print('')
-        print_info('-'*80)
-        print_info(' '*27 + 'Synthesis Warnings')
-        print_info('-'*80 + '\n')
         for w in syn_warn:
             print( colorize(w[0], 'yellow'), w[1] )
         for cw in syn_crit_warn:
             print( colorize(cw[0], 'yellow'), cw[1] )
 
     if 'impl' in opt or 'all' in opt:
-        print('')
-        print_info('-'*80)
-        print_info(' '*27 + 'Implementation Warnings')
-        print_info('-'*80 + '\n')
         for w in impl_warn:
             print( colorize(w[0], 'yellow'), w[1] )
         for cw in impl_crit_warn:
