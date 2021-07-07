@@ -1,3 +1,3 @@
 
 sources:
-    - src/cfg/7a50t/tcl/xpr_hook.tcl
+    - src/cfg/7a50t/script/xpr_hook.tcl
