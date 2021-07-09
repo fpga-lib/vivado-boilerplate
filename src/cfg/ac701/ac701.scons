@@ -178,7 +178,7 @@ Help("""
 from tabulate import tabulate
 import vivado_report as vrpt
 
-warn_opt_str = ARGUMENTS.get('warn', 'all')
+warn_opt_str = ARGUMENTS.get('warn', '')
 warn_opt     = warn_opt_str.split()
 
 def warning_summary(target, source, env):
