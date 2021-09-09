@@ -61,7 +61,7 @@ foreach f $ip_ooc {
 #
 if { $USE_ILA == 1} {
     set ila_proc [file join $ROOT_DIR site_scons/ila_proc.tcl]
-    set ila_pcie [file join $CFG_DIR tcl/ila.tcl]
+    set ila_pcie [file join $CFG_DIR script/ila.tcl]
 
     add_files -fileset constrs_1 -norecurse "$ila_proc $ila_pcie"
     set_property used_in_synthesis false  [get_files  "$ila_proc $ila_pcie"]
