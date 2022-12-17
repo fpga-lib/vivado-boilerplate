@@ -9,6 +9,10 @@
 import os
 import sys
 
+add_search_path( os.path.join( os.getcwd(), 'env') )
+
+print( get_search_path() )
+
 #-------------------------------------------------------------------------------
 #
 #    Configuration
@@ -40,6 +44,21 @@ prj_impl_deps  = [ila_settings]
 #
 Import('envx')
 
+env = import_config('env.yml')
+
+envx['ENV']['PATH']          = os.environ['PATH']
+envx['ENV']['CAD']           = os.environ['CAD']
+envx['ENV']['DISPLAY']       = os.environ['DISPLAY']
+envx['ENV']['HOME']          = os.environ['HOME']
+envx['ENV']['XILINX']        = env.XILINX
+envx['ENV']['MENTOR']        = env.MENTOR
+envx['ENV']['XILINX_VIVADO'] = env.XILINX_VIVADO
+envx['QUESTABIN']            = env.QUESTABIN
+envx['QUESTASIM']            = env.QUESTASIM
+envx['VENDOR_LIB_PATH']      = env.VENDOR_LIB_PATH
+envx['XILINX_VIVADO']        = env.XILINX_VIVADO
+envx['XILINX_HLS']           = env.XILINX_HLS
+
 envx.Tool('vivado')
 envx.Tool('questa')
 
@@ -49,12 +68,12 @@ envx['TESTBENCH_NAME']      = cfg.TESTBENCH_NAME
 envx['DEVICE']              = cfg.DEVICE
 
 # path
-envx['SETTINGS_SEARCH_PATH'] = [dirs.SETTINGS]                               # dir for settings files (typically *.yml)
+envx['CONFIG_SEARCH_PATH'] = [dirs.SETTINGS]                                 # dir for settings files (typically *.yml)
 envx['INC_PATH']             = [envx['BUILD_SRC_PATH']] + get_dirs(src_syn)
 envx['SIM_INC_PATH']         = envx['INC_PATH']
 
 envx.Append(VLOG_FLAGS = ' -O5 -timescale=1ns/1ps')
-envx.Append(VOPT_FLAGS = ' -O5 -L wlib -L unifast_ver -L unisims_ver -L unimacro_ver -L secureip -L xpmlib -L ipsimlib')
+envx.Append(VOPT_FLAGS = ' -O5 -L wlib -L unifast_ver -L unisims_ver -L unimacro_ver -L secureip -L xpmlib')
 
 # user-defined parameters
 envx.Append(USER_DEFINED_PARAMS = {'ROOT_DIR'      : envx['ROOT_PATH']})
@@ -81,8 +100,7 @@ IP_Syn_Scripts     = envx.IpSynScripts(ip)
 IP_Cores           = envx.CreateIps(IP_Create_Scripts)
 IP_OOC_Syn         = envx.SynIps(IP_Syn_Scripts, IP_Cores)
                    
-IP_SimLib_Scripts  = envx.IpSimLibScripts(IP_Cores)
-IP_SimLib          = envx.CompileSimLib(IP_SimLib_Scripts)
+IP_SimLib          = envx.CompileSimLib(IP_Cores)
                    
 #   generated sources
 CfgParamsHeader    = envx.CreateCfgParamsHeader(cfg_params_header, hdl_param_deps)
@@ -127,7 +145,6 @@ envx.Alias('ipss',       IP_Syn_Scripts)
 envx.Alias('ip_cores',   IP_Cores)
 envx.Alias('ip_ooc',     IP_OOC_Syn)
                          
-envx.Alias('ip_sls',     IP_SimLib_Scripts)
 envx.Alias('simlib',     IP_SimLib)
 envx.Alias('cparam',     CfgParamsHeader)
 envx.Alias('cparam-tcl', CfgParamsTcl)
