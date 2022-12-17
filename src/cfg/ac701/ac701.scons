@@ -175,6 +175,20 @@ Help("""
 #
 #  Extensions
 #
+def show_syn_log(target, source, env):
+    synlog   = os.path.join(env['BUILD_SYN_PATH'], env['VIVADO_PROJECT_NAME'] + '.runs', 'synth_1', 'runme.log')
+    impllog  = os.path.join(env['BUILD_SYN_PATH'], env['VIVADO_PROJECT_NAME'] + '.runs', 'impl_1', 'runme.log')
+    logmon   = os.path.join(dirs.SCRIPT, 'logmon.sh')
+
+    cmd = 'gnome-terminal -t Synthesis  -- zsh -c "' + logmon + ' ' + synlog + '"'
+    print('launch presynth action', cmd)
+    os.system(cmd)
+
+envx.AddPreAction(SynthVivadoProject, show_syn_log)
+
+
+#---------------------------------------------------------------------
+
 from tabulate import tabulate
 import vivado_report as vrpt
 
