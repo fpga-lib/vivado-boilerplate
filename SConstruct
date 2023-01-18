@@ -42,8 +42,12 @@ Help(help_info)
 #
 if 'bv' in ARGUMENTS:
     variant = ARGUMENTS.get('bv')
+    ARGUMENTS['variant'] = variant
+elif 'variant' in ARGUMENTS:
+    variant = ARGUMENTS.get('variant')
+    ARGUMENTS['bv'] = variant
 else:
-    variant = ARGUMENTS.get('variant', 'ku15p')
+    print_error('\nError: build variant must be specified via \'variant=<variant name>\' or \'bv=<variant name>\' CLI argument')
 
 variant_name = variant.split(os.sep)[-1]
 
@@ -63,6 +67,8 @@ if not os.path.exists(variant_path):
 #    Environment
 #
 envx = Environment() #( tools = {} )
+
+envx['BUILD_VARIANT'] = variant
 
 set_comstr(envx)
 

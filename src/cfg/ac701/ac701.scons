@@ -46,18 +46,17 @@ Import('envx')
 
 env = import_config('env.yml')
 
-envx['ENV']['PATH']          = os.environ['PATH']
-envx['ENV']['CAD']           = os.environ['CAD']
-envx['ENV']['DISPLAY']       = os.environ['DISPLAY']
-envx['ENV']['HOME']          = os.environ['HOME']
-envx['ENV']['XILINX']        = env.XILINX
-envx['ENV']['MENTOR']        = env.MENTOR
-envx['ENV']['XILINX_VIVADO'] = env.XILINX_VIVADO
-envx['QUESTABIN']            = env.QUESTABIN
-envx['QUESTASIM']            = env.QUESTASIM
-envx['VENDOR_LIB_PATH']      = env.VENDOR_LIB_PATH
-envx['XILINX_VIVADO']        = env.XILINX_VIVADO
-envx['XILINX_HLS']           = env.XILINX_HLS
+envx['ENV']['DISPLAY']            = os.environ['DISPLAY']
+envx['ENV']['HOME']               = os.environ['HOME']
+envx['ENV']['XILINX']             = env.XILINX
+envx['ENV']['MENTOR']             = env.MENTOR
+envx['ENV']['MGLS_LICENSE_FILE']  = env.MGLS_LICENSE_FILE
+envx['ENV']['XILINX_VIVADO']      = env.XILINX_VIVADO
+envx['XILINX_VIVADO']             = env.XILINX_VIVADO
+envx['XILINX_HLS']                = env.XILINX_HLS
+envx['QUESTABIN']                 = env.QUESTABIN
+envx['QUESTASIM']                 = env.QUESTASIM
+envx['VENDOR_LIB_PATH']           = env.VENDOR_LIB_PATH
 
 envx.Tool('vivado')
 envx.Tool('questa')
