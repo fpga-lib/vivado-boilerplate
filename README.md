@@ -1,6 +1,6 @@
 # vivado-boilerplate
 
-This is an example project to demonstrate features of SCons-based build system for FPGA. Xilinx Vivado and Mentor Questa are supported for now.
+This is an example project to demonstrate features of [SCons-based build system for FPGA](https://fpga-lib.github.io/fbsdocs). Xilinx Vivado and Mentor Questa are supported for now.
 
 ## Features
 * Unified configuration subsystem based on [YAML format](https://en.wikipedia.org/wiki/YAML).
