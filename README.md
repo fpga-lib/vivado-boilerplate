@@ -30,28 +30,36 @@ This is an example project to demonstrate features of [SCons-based build system 
 
 Commands can be invoked from any directory within project directory tree.
 
-Display available targets:
+#### Display available targets:
 
 ```
-scons -s -D -h
+scons -s -D variant=ac701 -h
 ```
 
-Create Vivado project:
+#### Create Vivado project:
 
 ```
-scons -s -D prj
+scons -s -D variant=ac701 prj
 ```
 
-Synthesize Vivado project for variant 7A50T:
+#### Synthesize Vivado project for variant 7A50T:
 
 ```
 scons -s -D variant=7a50t prjsyn
 ```
 
-Compile simulator work library (this is a default target):
+##### Open Vivado project for variant 7A35T
 
 ```
-scons -s -D
+scons -s -D bv=7a35t prjopen
+```
+
+Arguments `variant` and `bv` (means 'build variant') are synonyms.
+
+#### Compile simulator work library (this is a default target):
+
+```
+scons -s -D bv=7a35t
 ```
 
 Changing any parameter file that is a dependency for some target[s] raises rebuild for all targes in dependency chain.
