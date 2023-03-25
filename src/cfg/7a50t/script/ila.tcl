@@ -1,1 +1,1 @@
-/opt/slon/xilinx/npf/vivado-boilerplate/src/cfg/ac701/script/ila.tcl
+../../ac701/script/ila.tcl

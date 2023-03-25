@@ -5,6 +5,12 @@ import sys
 
 sys.dont_write_bytecode = True
 
+import sys
+
+sys.path.append( '.scons_ext' )
+
+from helpers import *
+
 #-------------------------------------------------------------------------------
 #
 #    Help info
@@ -19,7 +25,7 @@ help_info ="""
      
     Usage:
     ~~~~~  
-    scons [variant=<[path/]name>] [targets]
+    scons [options] [variant|bv=<[path/]name>] [targets]
 """
 
 Help(help_info)
@@ -32,25 +38,16 @@ Help(help_info)
 
 #-------------------------------------------------------------------------------
 #
-#    Environment
-#
-MENTOR = os.environ['MENTOR']
-
-envx = Environment() #( tools = {} )
-
-envx['ENV']['PATH']    = os.environ['PATH']
-envx['ENV']['CAD']     = os.environ['CAD']
-envx['ENV']['DISPLAY'] = os.environ['DISPLAY']
-envx['ENV']['HOME']    = os.environ['HOME']
-envx['QUESTABIN']      = os.path.join(MENTOR, 'questa', 'questasim', 'bin')
-envx['QUESTASIM']      = os.path.join(MENTOR, 'questa.sh')
-
-
-#-------------------------------------------------------------------------------
-#
 #    Variant management
 #
-variant = ARGUMENTS.get('variant', 'ac701')
+if 'bv' in ARGUMENTS:
+    variant = ARGUMENTS.get('bv')
+    ARGUMENTS['variant'] = variant
+elif 'variant' in ARGUMENTS:
+    variant = ARGUMENTS.get('variant')
+    ARGUMENTS['bv'] = variant
+else:
+    print_error('\nError: build variant must be specified via \'variant=<variant name>\' or \'bv=<variant name>\' CLI argument')
 
 variant_name = variant.split(os.sep)[-1]
 
@@ -63,7 +60,17 @@ variant_path = os.path.join('src', 'cfg', variant, variant_name + '.scons')
 if not os.path.exists(variant_path):
     print_error('\nError: unsupported variant: ' + variant)
     print(help_info)
-    sys.exit(-3)
+    Exit(-3)
+
+#-------------------------------------------------------------------------------
+#
+#    Environment
+#
+envx = Environment() #( tools = {} )
+
+envx['BUILD_VARIANT'] = variant
+
+set_comstr(envx)
 
 SConscript(variant_path, exports='envx')
 
